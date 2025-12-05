@@ -15,7 +15,7 @@ const Header = () => {
             </div>
 
             <div className="d-flex align-items-center gap-4">
-                <span className="material-icons">notifications</span>
+                <span className="material-icons">notificación</span>
 
                 <img
                     src="https://i.pravatar.cc/50"
