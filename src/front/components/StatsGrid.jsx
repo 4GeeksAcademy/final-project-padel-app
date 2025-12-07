@@ -1,23 +1,41 @@
-import React from "react";
-
-const stats = [
-    { title: "Partidos esta semana", value: 8 },
-    { title: "Próximos Partidos", value: 3 },
-    { title: "Partidos organizados", value: 15 },
-    { title: "Ranking promedio", value: 4.5 },
-];
+import React, { useEffect, useState } from "react";
 
 const StatsGrid = () => {
+
+    const [stats, setStats] = useState(null);
+
+    useEffect(() => {
+        fetch(process.env.BACKEND_URL + "/api/user/stats", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Estadísticas cargadas:", data);
+                setStats(data);
+            })
+            .catch(err => console.error("Error stats:", err));
+    }, []);
+
+    if (!stats) return <div>Cargando estadísticas...</div>;
+
     return (
-        <div className="row g-3">
-            {stats.map((item, index) => (
-                <div className="col-md-3" key={index}>
-                    <div className="card shadow-sm p-3">
-                        <p className="text-muted mb-1">{item.title}</p>
-                        <h2 className="fw-bold">{item.value}</h2>
-                    </div>
-                </div>
-            ))}
+        <div className="stats-grid row">
+            <div className="col-md-4 card p-3 text-center">
+                <h5>Total partidos</h5>
+                <h2>{stats.total_partidos}</h2>
+            </div>
+
+            <div className="col-md-4 card p-3 text-center">
+                <h5>Victorias</h5>
+                <h2>{stats.victorias}</h2>
+            </div>
+
+            <div className="col-md-4 card p-3 text-center">
+                <h5>Derrotas</h5>
+                <h2>{stats.derrotas}</h2>
+            </div>
         </div>
     );
 };

@@ -1,22 +1,76 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
-from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
-from api.utils import generate_sitemap, APIException
+from flask import Flask, request, jsonify, Blueprint
+from api.models import db, User, Match
+from api.utils import APIException
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_cors import CORS
+import datetime
 
 api = Blueprint('api', __name__)
 
-# Allow CORS requests to this API
-CORS(api)
+# === CORS DEBE IR JUSTO DESPUÉS DEL BLUEPRINT ===
+CORS(api, resources={r"/*": {
+    "origins": "https://improved-fishstick-jj9qrgr5xqwv2pqp-3000.app.github.dev",
+    "supports_credentials": True
+}})
+
+# ------------ ENDPOINTS -----------------
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+@api.route('/user/me', methods=['GET'])
+@jwt_required()
+def get_user_me():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    return jsonify(user.serialize()), 200
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+
+@api.route('/user/matches', methods=['GET'])
+@jwt_required()
+def get_user_matches():
+    user_id = get_jwt_identity()
+    matches = Match.query.filter_by(user_id=user_id).all()
+    return jsonify([m.serialize() for m in matches]), 200
+
+
+@api.route('/user/match', methods=['POST'])
+@jwt_required()
+def create_match():
+    user_id = get_jwt_identity()
+    data = request.json
+
+    match = Match(
+        user_id=user_id,
+        resultado=data.get("resultado"),
+        companero=data.get("compañero"),
+        rivales=",".join(data.get("rivales")),
+        fecha=datetime.date.today()
+    )
+
+    db.session.add(match)
+    db.session.commit()
+    return jsonify({"msg": "Partido registrado"}), 201
+
+
+@api.route('/user/stats', methods=['GET'])
+@jwt_required()
+def user_stats():
+    user_id = get_jwt_identity()
+    matches = Match.query.filter_by(user_id=user_id).all()
+
+    total = len(matches)
+    victorias = sum(1 for m in matches if "ganado" in m.resultado.lower())
+    derrotas = total - victorias
+
+    stats = {
+        "total_partidos": total,
+        "victorias": victorias,
+        "derrotas": derrotas,
+        "ratio": victorias / total if total > 0 else 0
     }
 
-    return jsonify(response_body), 200
+    return jsonify(stats), 200
+
+
+@api.route('/hello', methods=['GET'])
+def hello_endpoint():
+    return jsonify({"message": "Hello from backend"}), 200
