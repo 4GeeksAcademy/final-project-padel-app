@@ -2,15 +2,11 @@ from flask import Blueprint, request, jsonify
 from api.models import db, User, Match, MatchUser, Court
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import datetime
+from flask_cors import CORS
 
 
 api = Blueprint('api', __name__)
 
-
-CORS(api, resources={r"/*": {
-    "origins": "https://improved-fishstick-jj9qrgr5xqwv2pqp-3000.app.github.dev",
-    "supports_credentials": True
-}})
 
 # ------------ ENDPOINTS -----------------
 
