@@ -18,11 +18,13 @@ const Sidebar = () => {
             {/* Logo */}
             <div className="d-flex align-items-center mb-4">
                 <img
-                    src="https://cdn-icons-png.flaticon.com/512/889/889442.png"
-                    alt="logo"
+                    src="https://cdn-icons-png.flaticon.com/512/742/742751.png"
+                    alt="Modern Padel Ball"
                     width="28"
                     className="me-2"
                 />
+
+
                 <h4 className="m-0 fw-bold">PadelPro</h4>
             </div>
 
@@ -31,13 +33,13 @@ const Sidebar = () => {
                 {items.map((item, index) => (
                     <div
                         key={index}
-                        className={`d-flex align-items-center mb-3 p-2 rounded ${item.active ? "bg-primary text-white" : "text-secondary"
+                        className={`sidebar-item d-flex align-items-center mb-3 p-2 rounded ${item.active ? "active-item" : ""
                             }`}
-                        style={{ cursor: "pointer" }}
                     >
                         <i className={`${item.icon} me-3 fs-5`} />
                         <span className="fw-semibold">{item.label}</span>
                     </div>
+
                 ))}
             </nav>
         </aside>

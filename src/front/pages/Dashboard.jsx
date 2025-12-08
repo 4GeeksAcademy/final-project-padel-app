@@ -11,8 +11,10 @@ import "../styles/dashboard.css";
 
 const Dashboard = () => {
 
-    // ESTADO DEL USUARIO
-    const [user, setUser] = useState(null);
+    // ESTADO DEL USUARIO - cargar partidos  - estadisticas
+const [user, setUser] = useState(null);
+const [matches, setMatches] = useState([]);
+const [stats, setStats] = useState(null);
 
     // CARGAR DATOS DEL USUARIO
     useEffect(() => {
@@ -24,8 +26,30 @@ const Dashboard = () => {
             .then(res => res.json())
             .then(data => setUser(data))
             .catch((err) => console.error("Error cargando usuario:", err));
+            loadMatches();
+            loadStats();
     }, []);
-console.log("BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
+    console.log("BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
+
+const loadMatches = async () => {
+    try {
+        const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/matches");
+        const data = await res.json();
+        setMatches(data.matches || []);
+    } catch (error) {
+        console.error("Error cargando matches:", error);
+    }
+};
+
+const loadStats = async () => {
+    try {
+        const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats");
+        const data = await res.json();
+        setStats(data || null);
+    } catch (error) {
+        console.error("Error cargando stats:", error);
+    }
+};
 
     if (!user) return <div>Cargando dashboard...</div>;
 
@@ -39,18 +63,18 @@ console.log("BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
 
                 <div className="container-fluid py-4">
 
-                    <StatsGrid />
+                    <StatsGrid stats={stats}/>
 
                     <div className="row mt-4">
 
                         <div className="col-md-8">
-                            <MatchesAvailable />
+                            <MatchesAvailable matches={matches}/>
                             <NearbyCourts />
                         </div>
 
                         <div className="col-md-4">
                             <MapCard />
-                            <PlayedMatches />
+                            <PlayedMatches matches={matches} />
                         </div>
                     </div>
                 </div>

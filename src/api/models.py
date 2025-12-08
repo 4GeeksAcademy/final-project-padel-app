@@ -7,6 +7,7 @@ db = SQLAlchemy()
 # USERS TABLE
 # ---------------------------------------------------
 
+
 class User(db.Model):
     __tablename__ = "users"
 
@@ -26,11 +27,13 @@ class User(db.Model):
     city = db.Column(db.String(100))
 
     created_at = db.Column(db.DateTime, default=db.func.now())
-    updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    updated_at = db.Column(
+        db.DateTime, default=db.func.now(), onupdate=db.func.now())
     deleted_at = db.Column(db.DateTime)
 
     # Relaciones
-    organized_matches = db.relationship("Match", backref="organizer", foreign_keys="Match.organized_id")
+    organized_matches = db.relationship(
+        "Match", backref="organizer", foreign_keys="Match.organized_id")
     match_participations = db.relationship("MatchUser", back_populates="user")
 
     def serialize(self):
@@ -68,7 +71,8 @@ class Court(db.Model):
     phone = db.Column(db.String(20))
 
     created_at = db.Column(db.DateTime, default=db.func.now())
-    updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    updated_at = db.Column(
+        db.DateTime, default=db.func.now(), onupdate=db.func.now())
     deleted_at = db.Column(db.DateTime)
 
     matches = db.relationship("Match", backref="court")
@@ -103,8 +107,10 @@ class Match(db.Model):
 class MatchUser(db.Model):
     __tablename__ = "matches_users"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey("matches.id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "users.id"), primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey(
+        "matches.id"), primary_key=True)
     is_organized = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", back_populates="match_participations")

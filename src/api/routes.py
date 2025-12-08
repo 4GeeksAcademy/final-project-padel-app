@@ -10,7 +10,7 @@ api = Blueprint('api', __name__)
 
 # ------------ ENDPOINTS -----------------
 
-
+"""""
 @api.route('/user/me', methods=['GET'])
 @jwt_required()
 def user_me():
@@ -53,3 +53,46 @@ def user_stats():
         "total_matches": total_matches,
         "organized": organized
     }), 200
+
+    """
+# ------------ ENDPOINTS TEMPORALES -----------------
+
+@api.route('/user/me', methods=['GET'])
+def temp_user_me():
+    return jsonify({
+        "id": 1,
+        "username": "test_user",
+        "firstname": "John",
+        "lastname": "Doe",
+        "email": "test@example.com",
+        "city": "Madrid"
+    }), 200
+
+@api.route('/user/matches', methods=['GET'])
+def temp_user_matches():
+    return jsonify({
+        "matches": [
+            {
+                "id": 1,
+                "day": "2025-12-02",
+                "time": "19:00",
+                "description": "Partido amistoso",
+                "court": "Central Court"
+            },
+            {
+                "id": 2,
+                "day": "2025-12-05",
+                "time": "20:30",
+                "description": "Entrenamiento",
+                "court": "Training Court"
+            }
+        ]
+    }), 200
+
+@api.route('/user/stats', methods=['GET'])
+def temp_user_stats():
+    return jsonify({
+        "total_matches": 12,
+        "organized": 4
+    }), 200
+

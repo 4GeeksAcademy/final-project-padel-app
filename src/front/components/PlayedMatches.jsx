@@ -1,38 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-const PlayedMatches = () => {
-
-    const [matches, setMatches] = useState([]);
-
-    useEffect(() => {
-        fetch(process.env.BACKEND_URL + "/api/user/matches", {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log("Partidos cargados:", data);
-                setMatches(data);
-            });
-    }, []);
-
+const PlayedMatches = ({ matches = [] }) => {
     return (
-        <div className="card p-3 mt-4">
-            <h4 className="mb-3">Partidos Jugados</h4>
+        <div className="card p-3">
+            <h5>Partidos Jugados</h5>
 
-            {matches.length === 0 && <p>No hay partidos registrados.</p>}
-
-            <ul className="list-group">
-                {matches.map(match => (
-                    <li key={match.id} className="list-group-item">
-                        <strong>Resultado:</strong> {match.resultado} <br />
-                        <strong>Compañero:</strong> {match.companero} <br />
-                        <strong>Rivales:</strong> {match.rivales.join(", ")} <br />
-                        <strong>Fecha:</strong> {match.fecha}
-                    </li>
-                ))}
-            </ul>
+            {matches.length === 0 ? (
+                <p>No hay partidos jugados.</p>
+            ) : (
+                <ul>
+                    {matches.map((match, index) => (
+                        <li key={index}>
+                            {match.day} - {match.description}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };
