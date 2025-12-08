@@ -11,46 +11,6 @@ api = Blueprint('api', __name__)
 # ------------ ENDPOINTS -----------------
 
 
-# LUEGO LO QUITO ES PRUEBA PARA LOS ENDPOINTS
-@api.route('/register', methods=['POST'])
-def register():
-    data = request.json
-
-    if User.query.filter_by(email=data.get("email")).first():
-        return jsonify({"error": "Email already exists"}), 400
-
-    new_user = User(
-        username=data.get("username"),
-        firstname=data.get("firstname"),
-        lastname=data.get("lastname"),
-        email=data.get("email"),
-        password=data.get("password")  # luego se hará hash
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({"msg": "User created", "id": new_user.id}), 201
-
-
-# LUEGO LO QUITO ES PRUEBA PARA LOS ENDPOINTS
-@api.route('/login', methods=['POST'])
-def login():
-    data = request.json
-
-    user = User.query.filter_by(email=data.get("email")).first()
-
-    if user is None:
-        return jsonify({"error": "User not found"}), 404
-
-    if user.password != data.get("password"):
-        return jsonify({"error": "Wrong password"}), 401
-
-    token = create_access_token(identity=user.id)
-
-    return jsonify({"token": token, "user_id": user.id}), 200
-
-
 @api.route('/user/me', methods=['GET'])
 @jwt_required()
 def user_me():
