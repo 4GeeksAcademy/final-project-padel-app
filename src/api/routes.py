@@ -1,13 +1,12 @@
-from flask import Flask, request, jsonify, Blueprint
-from api.models import db, User, Match
-from api.utils import APIException
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_cors import CORS
+from flask import Blueprint, request, jsonify
+from api.models import db, User, Match, MatchUser, Court
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import datetime
+
 
 api = Blueprint('api', __name__)
 
-# === CORS DEBE IR JUSTO DESPUÉS DEL BLUEPRINT ===
+
 CORS(api, resources={r"/*": {
     "origins": "https://improved-fishstick-jj9qrgr5xqwv2pqp-3000.app.github.dev",
     "supports_credentials": True
@@ -16,61 +15,85 @@ CORS(api, resources={r"/*": {
 # ------------ ENDPOINTS -----------------
 
 
+# LUEGO LO QUITO ES PRUEBA PARA LOS ENDPOINTS
+@api.route('/register', methods=['POST'])
+def register():
+    data = request.json
+
+    if User.query.filter_by(email=data.get("email")).first():
+        return jsonify({"error": "Email already exists"}), 400
+
+    new_user = User(
+        username=data.get("username"),
+        firstname=data.get("firstname"),
+        lastname=data.get("lastname"),
+        email=data.get("email"),
+        password=data.get("password")  # luego se hará hash
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"msg": "User created", "id": new_user.id}), 201
+
+
+# LUEGO LO QUITO ES PRUEBA PARA LOS ENDPOINTS
+@api.route('/login', methods=['POST'])
+def login():
+    data = request.json
+
+    user = User.query.filter_by(email=data.get("email")).first()
+
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+
+    if user.password != data.get("password"):
+        return jsonify({"error": "Wrong password"}), 401
+
+    token = create_access_token(identity=user.id)
+
+    return jsonify({"token": token, "user_id": user.id}), 200
+
+
 @api.route('/user/me', methods=['GET'])
 @jwt_required()
-def get_user_me():
+def user_me():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
     return jsonify(user.serialize()), 200
 
 
 @api.route('/user/matches', methods=['GET'])
 @jwt_required()
-def get_user_matches():
+def user_matches():
     user_id = get_jwt_identity()
-    matches = Match.query.filter_by(user_id=user_id).all()
-    return jsonify([m.serialize() for m in matches]), 200
+
+    relations = MatchUser.query.filter_by(user_id=user_id).all()
+
+    matches = [{
+        "id": r.match.id,
+        "day": str(r.match.day),
+        "time": str(r.match.time),
+        "description": r.match.description,
+        "court": r.match.court.name if r.match.court else None
+    } for r in relations]
+
+    return jsonify(matches), 200
 
 
-@api.route('/user/match', methods=['POST'])
-@jwt_required()
-def create_match():
-    user_id = get_jwt_identity()
-    data = request.json
-
-    match = Match(
-        user_id=user_id,
-        resultado=data.get("resultado"),
-        companero=data.get("compañero"),
-        rivales=",".join(data.get("rivales")),
-        fecha=datetime.date.today()
-    )
-
-    db.session.add(match)
-    db.session.commit()
-    return jsonify({"msg": "Partido registrado"}), 201
-
-
-@api.route('/user/stats', methods=['GET'])
+@api.route('/user/stats', methods=['GET'])  # ESTADISTICAS DEL USUARIO
 @jwt_required()
 def user_stats():
     user_id = get_jwt_identity()
-    matches = Match.query.filter_by(user_id=user_id).all()
 
-    total = len(matches)
-    victorias = sum(1 for m in matches if "ganado" in m.resultado.lower())
-    derrotas = total - victorias
+    total_matches = MatchUser.query.filter_by(user_id=user_id).count()
+    organized = Match.query.filter_by(organized_id=user_id).count()
 
-    stats = {
-        "total_partidos": total,
-        "victorias": victorias,
-        "derrotas": derrotas,
-        "ratio": victorias / total if total > 0 else 0
-    }
-
-    return jsonify(stats), 200
-
-
-@api.route('/hello', methods=['GET'])
-def hello_endpoint():
-    return jsonify({"message": "Hello from backend"}), 200
+    return jsonify({
+        "total_matches": total_matches,
+        "organized": organized
+    }), 200
