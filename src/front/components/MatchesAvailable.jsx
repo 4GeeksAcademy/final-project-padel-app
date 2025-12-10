@@ -1,8 +1,9 @@
 import React from "react";
 
-const MatchesAvailable = () => {
+const MatchesAvailable = ({ matches = [] }) => {
     return (
-        <div className="card p-3 shadow-sm mb-4">
+        <div className="card p-4 mb-4 dashboard-card">
+
             <h5 className="fw-bold mb-3">Partidos Disponibles</h5>
 
             <div className="row g-3">
