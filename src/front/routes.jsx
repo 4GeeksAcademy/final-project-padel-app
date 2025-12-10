@@ -10,6 +10,8 @@ import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 import Dashboard from "./pages/Dashboard.jsx";
 import { Registro } from "./pages/Registro";
+import Login  from "./pages/Login"
+
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,7 +23,8 @@ export const router = createBrowserRouter(
       <Route path="/demo" element={<Demo />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/registro" element={<Registro />} />
-
+       <Route path="/login" element={<Login/>} />
     </Route>
   )
 );
+      
