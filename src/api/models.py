@@ -47,7 +47,7 @@ class User(db.Model):
     updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
 
-    # organized_matches: Mapped[List["Match"]] = relationship("Match", back_populates="organized", foreign_keys="Match.organized_id")
+    organized_matches: Mapped[List["Match"]] = relationship("Match", back_populates="organized", foreign_keys="Match.organized_id")
     # match_links: Mapped[List["MatchUser"]] = relationship("MatchUser", back_populates="user")
     
     matchs: Mapped[List["Match"]] = relationship(back_populates="users", secondary=match_user)
@@ -139,12 +139,12 @@ class Match(db.Model):
     description: Mapped[str | None] = mapped_column(String(500))
     status: Mapped[bool | None] = mapped_column(Boolean())
     # court_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("courts.id"))
-    # organized_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"))
+    organized_id: Mapped[int | None] = mapped_column(Integer,db.ForeignKey("users.id"))
     type: Mapped[str | None] = mapped_column(String(50))
     court_id: Mapped[int | None] = mapped_column(Integer,db.ForeignKey("courts.id"), nullable=False)
     
     # court: Mapped["Court"] = relationship("Court", back_populates="matches")
-    # organized: Mapped["User"] = relationship("User", back_populates="organized_matches")
+    organized: Mapped["User"] = relationship("User", back_populates="organized_matches")
     # users: Mapped[List["MatchUser"]] = relationship("MatchUser", back_populates="match")
     court: Mapped["Court"] = relationship(back_populates="list_match")
     users: Mapped[List["User"]] = relationship(back_populates="matchs", secondary=match_user)

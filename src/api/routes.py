@@ -251,20 +251,20 @@ def courts_delete(court_id):
 # ========== MATCHES ENDPOINTS ==========
 
 
-# @api.route('/matches', methods=['GET'])
-# def matches_list():
-#     """Get all matches"""
-#     matches = Match.query.filter_by(deleted_at=None).all()
-#     return jsonify([m.serialize() for m in matches]), 200
+@api.route('/matches', methods=['GET'])
+def matches_list():
+    """Get all matches"""
+    matches = Match.query.filter_by(deleted_at=None).all()
+    return jsonify([m.serialize() for m in matches]), 200
 
 
-# @api.route('/matches/<int:match_id>', methods=['GET'])
-# def matches_get(match_id):
-#     """Get a specific match by ID"""
-#     match = Match.query.filter_by(id=match_id, deleted_at=None).first()
-#     if not match:
-#         raise APIException('match not found', status_code=404)
-#     return jsonify(match.serialize()), 200
+@api.route('/matches/<int:match_id>', methods=['GET'])
+def matches_get(match_id):
+    """Get a specific match by ID"""
+    match = Match.query.filter_by(id=match_id, deleted_at=None).first()
+    if not match:
+        raise APIException('match not found', status_code=404)
+    return jsonify(match.serialize()), 200
 
 
 @api.route('/matches', methods=['POST'])
