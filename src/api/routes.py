@@ -19,7 +19,11 @@ CORS(api)
 # ========== AUTH ENDPOINTS ==========
 
 
-@api.route('/auth/register', methods=['POST'])
+# Allow CORS requests to this API
+CORS(api)
+# ========== AUTH ENDPOINTS ==========
+
+@api.route('/register', methods=['POST'])
 def register():
     """Register a new user"""
     data = request.get_json() or {}
@@ -52,7 +56,6 @@ def register():
     if User.query.filter_by(username=username).first():
         raise APIException('username already registered', status_code=409)
     # ============ FIN DE VALIDACIONES ============
-    
     # Crear el usuario con los datos validados
     user = User(
         email=email,
@@ -106,7 +109,7 @@ def me():
     
     if not user:
         raise APIException('user not found', status_code=404)
-    
+
     return jsonify(user.serialize()), 200
 
 
