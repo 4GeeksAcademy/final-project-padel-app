@@ -1,53 +1,27 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+// Home.jsx
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
+  const navigate = useNavigate();
 
-	const { store, dispatch } = useGlobalReducer()
+  return (
+    <div className="home-container">
+      <h1>Bienvenido a Padel App</h1>
+      <p>Aquí va tu descripción del app...</p>
+      
+      <div className="button-group">
+        <button onClick={() => navigate("/login")} className="btn btn-primary">
+          Iniciar Sesión
+        </button>
+        <button onClick={() => navigate("/registro")} className="btn btn-secondary">
+          Registrarse
+        </button>
+      </div>
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
-
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
-
-			const response = await fetch(`${backendUrl}/hello`)
-
-			const data = await response.json()
-
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
-
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
-
-	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
-		</div>
-	);
-}; 
+      {/* Mostrar Dashboard si estás logueado */}
+      <button onClick={() => navigate("/dashboard")} className="btn btn-outline">
+        Dashboard
+      </button>
+    </div>
+  );
+};
