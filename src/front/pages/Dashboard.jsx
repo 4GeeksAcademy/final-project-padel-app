@@ -10,65 +10,80 @@ import PlayedMatches from "../components/PlayedMatches.jsx";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
+    const [user, setUser] = useState(null);
+    const [matches, setMatches] = useState([]);
+    const [stats, setStats] = useState(null);
 
-    // ESTADO DEL USUARIO - cargar partidos  - estadisticas
-const [user, setUser] = useState(null);
-const [matches, setMatches] = useState([]);
-const [stats, setStats] = useState(null);
+    // Cargar datos del usuario
+    // useEffect(() => {
+    //     const token = localStorage.getItem("token");
 
-    // CARGAR DATOS DEL USUARIO
-    useEffect(() => {
-        fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/me", {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            }
-        })
-            .then(res => res.json())
-            .then(data => setUser(data))
-            .catch((err) => console.error("Error cargando usuario:", err));
-            loadMatches();
-            loadStats();
-    }, []);
-    console.log("BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
+    //     if (!token) {
+    //         console.error("No hay token. Usuario no autenticado.");
+    //         return;
+    //     }
 
-const loadMatches = async () => {
-    try {
-        const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/matches");
-        const data = await res.json();
-        setMatches(data.matches || []);
-    } catch (error) {
-        console.error("Error cargando matches:", error);
-    }
-};
+    //     fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/me", {
+    //         headers: {
+    //             "Authorization": "Bearer " + token
+    //         }
+    //     })
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             if (data.msg) {
+    //                 console.error("Error autenticación:", data);
+    //                 return;
+    //             }
+    //             setUser(data);
+    //             loadMatches(token);
+    //             loadStats(token);
+    //         })
+    //         .catch(err => console.error("Error cargando usuario:", err));
+    // }, []);
 
-const loadStats = async () => {
-    try {
-        const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats");
-        const data = await res.json();
-        setStats(data || null);
-    } catch (error) {
-        console.error("Error cargando stats:", error);
-    }
-};
+    const loadMatches = async (token) => {
+        try {
+            const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/matches", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+            const data = await res.json();
+            setMatches(data.matches || []);
+        } catch (error) {
+            console.error("Error cargando matches:", error);
+        }
+    };
 
-    if (!user) return <div>Cargando dashboard...</div>;
+    const loadStats = async (token) => {
+        try {
+            const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+            const data = await res.json();
+            setStats(data || null);
+        } catch (error) {
+            console.error("Error cargando stats:", error);
+        }
+    };
+
+   // if (!user) return <div>Cargando dashboard...</div>;
 
     return (
         <div className="dashboard-container d-flex">
-
             <Sidebar user={user} />
 
             <div className="main-content flex-grow-1">
                 <Header user={user} />
 
                 <div className="container-fluid py-4">
-
-                    <StatsGrid stats={stats}/>
+                    <StatsGrid stats={stats} />
 
                     <div className="row mt-4">
-
                         <div className="col-md-8">
-                            <MatchesAvailable matches={matches}/>
+                            <MatchesAvailable matches={matches} />
                             <NearbyCourts />
                         </div>
 
@@ -84,4 +99,3 @@ const loadStats = async () => {
 };
 
 export default Dashboard;
-
