@@ -1,40 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-const StatsGrid = () => {
+const StatsGrid = ({ stats }) => {
 
-    const [stats, setStats] = useState(null);
+    if (!stats) return (
+        <div className="card p-4 dashboard-card">
 
-    useEffect(() => {
-        fetch(process.env.BACKEND_URL + "/api/user/stats", {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log("Estadísticas cargadas:", data);
-                setStats(data);
-            })
-            .catch(err => console.error("Error stats:", err));
-    }, []);
-
-    if (!stats) return <div>Cargando estadísticas...</div>;
+            <h5>Estadísticas</h5>
+            <p>Cargando estadísticas...</p>
+        </div>
+    );
 
     return (
-        <div className="stats-grid row">
-            <div className="col-md-4 card p-3 text-center">
-                <h5>Total partidos</h5>
-                <h2>{stats.total_partidos}</h2>
-            </div>
+        <div className="card p-3">
+            <h5>Estadísticas</h5>
 
-            <div className="col-md-4 card p-3 text-center">
-                <h5>Victorias</h5>
-                <h2>{stats.victorias}</h2>
-            </div>
+            <div className="row text-center">
 
-            <div className="col-md-4 card p-3 text-center">
-                <h5>Derrotas</h5>
-                <h2>{stats.derrotas}</h2>
+                <div className="col-md-4">
+                    <h3>{stats.total_matches}</h3>
+                    <p>Partidos Jugados</p>
+                </div>
+
+                <div className="col-md-4">
+                    <h3>{stats.matches_won}</h3>
+                    <p>Partidos Ganados</p>
+                </div>
+
+                <div className="col-md-4">
+                    <h3>{stats.matches_lost}</h3>
+                    <p>Partidos Perdidos</p>
+                </div>
+
             </div>
         </div>
     );

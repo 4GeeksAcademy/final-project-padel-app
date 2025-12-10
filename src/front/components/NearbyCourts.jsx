@@ -2,7 +2,8 @@ import React from "react";
 
 const NearbyCourts = () => {
     return (
-        <div className="card p-3 shadow-sm mb-4">
+        <div className="card p-4 dashboard-card">
+
             <h5 className="fw-bold mb-3">Canchas Cercanas</h5>
 
             {[1, 2, 3].map((i) => (

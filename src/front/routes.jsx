@@ -7,7 +7,7 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Registro } from "./pages/Registro";
-import { Dashboard } from "./pages/Dashboard";
+import  Dashboard  from "./pages/Dashboard";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
