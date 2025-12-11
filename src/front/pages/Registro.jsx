@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import fondoRegistro from "../assets/img/imagen2.jpg"
 import { RegisterFormInput } from "../components/RegisterFormInput";
 import { useState, useEffect } from "react";
 
 export const Registro = () => {
+    const navigate = useNavigate();
     const [values, setValues] = useState({
         nombre: "",
         apellido: "",
@@ -22,7 +24,8 @@ export const Registro = () => {
     const registrarse = (e) => {
         e.preventDefault();
         console.log(values);
-
+        // Navigate to Login after registration
+        navigate("/login");
     }
 
 
