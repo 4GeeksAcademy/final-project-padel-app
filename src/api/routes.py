@@ -72,7 +72,7 @@ def register():
         city=data.get('city'),
         is_active=True,
     )
-    
+    print(user)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
