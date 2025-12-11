@@ -1,48 +1,42 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import "../styles/sidebar.css";
+
+
 
 const Sidebar = () => {
-    const items = [
-        { icon: "bi-house", label: "Inicio", active: true },
-        { icon: "bi-collection", label: "Partidos" },
-        { icon: "bi-grid", label: "Canchas" },
-        { icon: "bi-people", label: "Jugadores" },
-        { icon: "bi-trophy", label: "Rankings" },
-        { icon: "bi-gear", label: "Ajustes" }
-    ];
-
     return (
-        <aside
-            className="d-flex flex-column p-4"
-            style={{ width: "240px", background: "#f8f9fa", height: "100vh" }}
-        >
-            {/* Logo */}
-            <div className="d-flex align-items-center mb-4">
-                <img
-                    src="https://cdn-icons-png.flaticon.com/512/742/742751.png"
-                    alt="Modern Padel Ball"
-                    width="28"
-                    className="me-2"
-                />
+        <div className="sidebar-container">
+            <NavLink to="/dashboard" className="sidebar-item">
+                <i className="fa-solid fa-house sidebar-icon"></i>
+                <span>Inicio</span>
+            </NavLink>
 
+            <NavLink to="/partidos" className="sidebar-item">
+                <i className="fa-solid fa-calendar-days sidebar-icon"></i>
+                <span>Partidos</span>
+            </NavLink>
 
-                <h4 className="m-0 fw-bold">PadelPro</h4>
-            </div>
+            <NavLink to="/cancha/1" className="sidebar-item">
+                <i className="fa-solid fa-border-all sidebar-icon"></i>
+                <span>Canchas</span>
+            </NavLink>
 
-            {/* Menu */}
-            <nav className="mt-3">
-                {items.map((item, index) => (
-                    <div
-                        key={index}
-                        className={`sidebar-item d-flex align-items-center mb-3 p-2 rounded ${item.active ? "active-item" : ""
-                            }`}
-                    >
-                        <i className={`${item.icon} me-3 fs-5`} />
-                        <span className="fw-semibold">{item.label}</span>
-                    </div>
+            <NavLink to="/jugadores" className="sidebar-item">
+                <i className="fa-solid fa-users sidebar-icon"></i>
+                <span>Jugadores</span>
+            </NavLink>
 
-                ))}
-            </nav>
-        </aside>
+            <NavLink to="/rankings" className="sidebar-item">
+                <i className="fa-solid fa-trophy sidebar-icon"></i>
+                <span>Rankings</span>
+            </NavLink>
+
+            <NavLink to="/ajustes" className="sidebar-item">
+                <i className="fa-solid fa-gear sidebar-icon"></i>
+                <span>Ajustes</span>
+            </NavLink>
+        </div>
     );
 };
 

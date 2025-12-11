@@ -11,16 +11,18 @@ db = SQLAlchemy()
 # ---------------------------------------------------
 
 match_user = db.Table('matchs_users',
-                          db.Column('id', db.Integer, primary_key=True),
-                          db.Column('user_id', db.Integer, db.ForeignKey(
-                              "users.id"), nullable=False),
-                          db.Column('match_id', db.Integer, db.ForeignKey(
-                              "matchs.id"), nullable=False),
-                          db.Column('is_player', db.Boolean(), default=True),
-                          db.Column('create_at', db.DateTime,server_default=db.func.current_timestamp()),
-                          db.Column('update_at', db.DateTime,server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp()),
-                          db.Column('deleted_at', db.DateTime)
-                          )
+                      db.Column('id', db.Integer, primary_key=True),
+                      db.Column('user_id', db.Integer, db.ForeignKey(
+                          "users.id"), nullable=False),
+                      db.Column('match_id', db.Integer, db.ForeignKey(
+                          "matchs.id"), nullable=False),
+                      db.Column('is_player', db.Boolean(), default=True),
+                      db.Column('create_at', db.DateTime,
+                                server_default=db.func.current_timestamp()),
+                      db.Column('update_at', db.DateTime, server_default=db.func.current_timestamp(
+                      ), onupdate=db.func.current_timestamp()),
+                      db.Column('deleted_at', db.DateTime)
+                      )
 # ---------------------------------------------------
 # USERS TABLE
 # ---------------------------------------------------
@@ -28,12 +30,14 @@ match_user = db.Table('matchs_users',
 
 class User(db.Model):
     __tablename__ = "users"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    username: Mapped[str] = mapped_column(
+        String(50), unique=True, nullable=False)
     lastname: Mapped[str] = mapped_column(String(50), nullable=False)
     firstname: Mapped[str] = mapped_column(String(50), nullable=False)
-    email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(100), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     gender: Mapped[str | None] = mapped_column(String(30))
     phone: Mapped[str | None] = mapped_column(String(20))
@@ -43,16 +47,21 @@ class User(db.Model):
     latitude: Mapped[float | None] = mapped_column(Float)
     longitude: Mapped[float | None] = mapped_column(Float)
     city: Mapped[str | None] = mapped_column(String(100))
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp())
-    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    is_active: Mapped[bool] = mapped_column(
+        Boolean(), nullable=False, default=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=db.func.current_timestamp())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
 
-    organized_matches: Mapped[List["Match"]] = relationship("Match", back_populates="organized", foreign_keys="Match.organized_id")
+    organized_matches: Mapped[List["Match"]] = relationship(
+        "Match", back_populates="organized", foreign_keys="Match.organized_id")
     # match_links: Mapped[List["MatchUser"]] = relationship("MatchUser", back_populates="user")
-    
-    matchs: Mapped[List["Match"]] = relationship(back_populates="users", secondary=match_user)
-    
+
+    matchs: Mapped[List["Match"]] = relationship(
+        back_populates="users", secondary=match_user)
+
     def __repr__(self):
         return f"<User {self.username}>"
 
@@ -76,11 +85,11 @@ class User(db.Model):
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
             "deleted_at": self.deleted_at.isoformat() if self.deleted_at else None
         }
-    
+
     def set_password(self, password):
         from werkzeug.security import generate_password_hash
         self.password = generate_password_hash(password)
-    
+
     def check_password(self, password):
         from werkzeug.security import check_password_hash
         return check_password_hash(self.password, password)
@@ -101,11 +110,15 @@ class Court(db.Model):
     city: Mapped[str | None] = mapped_column(String(50))
     type: Mapped[str | None] = mapped_column(String(10))
     phone: Mapped[str | None] = mapped_column(String(20))
-    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp())
-    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    image_url: Mapped[str | None] = mapped_column(String(300))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=db.func.current_timestamp())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
-    
-    list_match: Mapped[List["Match"]] = relationship("Match", back_populates="court")   
+
+    list_match: Mapped[List["Match"]] = relationship(
+        "Match", back_populates="court")
 
     def serialize(self):
         return {
@@ -133,22 +146,28 @@ class Match(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     day: Mapped[datetime | None] = mapped_column(DateTime)
     time: Mapped[datetime | None] = mapped_column(DateTime)
-    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp())
-    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=db.func.current_timestamp())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
     contact_phone: Mapped[str | None] = mapped_column(String(50))
     description: Mapped[str | None] = mapped_column(String(500))
     status: Mapped[bool | None] = mapped_column(Boolean())
     # court_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("courts.id"))
-    organized_id: Mapped[int | None] = mapped_column(Integer,db.ForeignKey("users.id"))
+    organized_id: Mapped[int | None] = mapped_column(
+        Integer, db.ForeignKey("users.id"))
     type: Mapped[str | None] = mapped_column(String(50))
-    court_id: Mapped[int | None] = mapped_column(Integer,db.ForeignKey("courts.id"), nullable=False)
-    
+    court_id: Mapped[int | None] = mapped_column(
+        Integer, db.ForeignKey("courts.id"), nullable=False)
+
     # court: Mapped["Court"] = relationship("Court", back_populates="matches")
-    organized: Mapped["User"] = relationship("User", back_populates="organized_matches")
+    organized: Mapped["User"] = relationship(
+        "User", back_populates="organized_matches")
     # users: Mapped[List["MatchUser"]] = relationship("MatchUser", back_populates="match")
     court: Mapped["Court"] = relationship(back_populates="list_match")
-    users: Mapped[List["User"]] = relationship(back_populates="matchs", secondary=match_user)
+    users: Mapped[List["User"]] = relationship(
+        back_populates="matchs", secondary=match_user)
 
     def serialize(self):
         return {
@@ -161,9 +180,36 @@ class Match(db.Model):
             "contact_phone": self.contact_phone,
             "description": self.description,
             "status": self.status,
-            "court_id": self.court_id,
-            "organized_id": self.organized_id,
             "type": self.type,
+
+            # ORGANIZADOR (tu relación se llama "organized")
+            "organizador": {
+                "id": self.organized.id,
+                "username": self.organized.username,
+                "nombre": f"{self.organized.firstname} {self.organized.lastname}",
+                "foto": self.organized.profile_photo
+            } if self.organized else None,
+
+            # PARTICIPANTES
+            "participantes": [
+                {
+                    "id": u.id,
+                    "username": u.username,
+                    "nombre": f"{u.firstname} {u.lastname}",
+                    "foto": u.profile_photo,
+                }
+                for u in self.users
+            ],
+
+            # CANCHA
+            "cancha": {
+                "id": self.court.id,
+                "nombre": self.court.name,
+                "direccion": self.court.address,
+                "ciudad": self.court.city,
+                # Si luego agregas una imagen:
+                "imagen": getattr(self.court, "image_url", None)
+            } if self.court else None,
         }
 
 
@@ -173,7 +219,7 @@ class Match(db.Model):
 
 # class MatchUser(db.Model):
 #     __tablename__ = "matchs_users"
-    
+
 #     id: Mapped[int] = mapped_column(primary_key=True)
 #     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
 #     match_id: Mapped[int] = mapped_column(Integer, ForeignKey("matchs.id"), nullable=False)
@@ -181,7 +227,7 @@ class Match(db.Model):
 #     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp())
 #     updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 #     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
-    
+
 #     user: Mapped["User"] = relationship("User", back_populates="match_links")
 #     match: Mapped["Match"] = relationship("Match", back_populates="users")
 
