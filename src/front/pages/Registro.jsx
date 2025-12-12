@@ -2,10 +2,12 @@ import { useNavigate } from "react-router-dom";
 import fondoRegistro from "../assets/img/imagen2.jpg"
 import { RegisterFormInput } from "../components/RegisterFormInput";
 import { useState, useEffect } from "react";
+import { createUser } from "../service/User";
 
 export const Registro = () => {
     const navigate = useNavigate();
     const [values, setValues] = useState({
+        username: "",
         nombre: "",
         apellido: "",
         edad: "",
@@ -21,11 +23,30 @@ export const Registro = () => {
         })
     }
 
-    const registrarse = (e) => {
+    const registrarse = async (e) => {
         e.preventDefault();
         console.log(values);
         // Navigate to Login after registration
-        navigate("/login");
+        const body = {
+            email: values.email,
+            username: values.username,
+            lastname: values.apellido,
+            firstname: values.nombre,
+            password: values.contraseña,
+            age: parseInt(values.edad),
+            gender: values.genero
+        }
+        console.log(body);
+
+        try {
+            const result = await createUser(body);
+            console.log(result);
+            setValues('')
+            navigate("/login");
+        } catch (error) {
+
+        }
+
     }
 
 
@@ -42,6 +63,15 @@ export const Registro = () => {
                         // label="Nombre"
                         type="text"
                         idInput="exampleFormControlInput1"
+                        name="username"
+                        placeholder="Ingrese nombre de usuario"
+                        value={values.username}
+                        handleChange={handleChange}
+                    />
+                    <RegisterFormInput
+                        // label="Nombre"
+                        type="text"
+                        idInput="exampleFormControlInput2"
                         name="nombre"
                         placeholder="Ingrese nombre"
                         value={values.nombre}
@@ -50,7 +80,7 @@ export const Registro = () => {
                     <RegisterFormInput
                         // label="Nombre"
                         type="text"
-                        idInput="exampleFormControlInput2"
+                        idInput="exampleFormControlInput3"
                         name="apellido"
                         placeholder="Ingrese apellido"
                         value={values.apellido}
@@ -59,7 +89,7 @@ export const Registro = () => {
                     <RegisterFormInput
                         // label="Nombre"
                         type="number"
-                        idInput="exampleFormControlInput3"
+                        idInput="exampleFormControlInput4"
                         name="edad"
                         placeholder="Ingrese edad"
                         value={values.edad}
@@ -91,7 +121,7 @@ export const Registro = () => {
                     <RegisterFormInput
                         // label="Contraseña"
                         type="password"
-                        idInput="exampleFormControlInput5"
+                        idInput="exampleFormControlInput6"
                         name="contraseña"
                         placeholder="Ingrese contraseña"
                         value={values.contraseña}
