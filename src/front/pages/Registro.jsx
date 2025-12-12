@@ -103,7 +103,7 @@ export const Registro = () => {
                     />
                     <RegisterFormInput
                         type="number"
-                        idInput="exampleFormControlInput3"
+                        idInput="exampleFormControlInput4"
                         name="edad"
                         placeholder="Ingrese edad"
                         value={values.edad}
