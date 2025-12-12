@@ -48,6 +48,8 @@ const Dashboard = () => {
                     "Authorization": "Bearer " + token
                 }
             });
+
+            
             const data = await res.json();
             setMatches(data.matches || []);
         } catch (error) {

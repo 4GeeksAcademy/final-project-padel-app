@@ -3,7 +3,8 @@ import fondoRegistro from "../assets/img/imagen2.jpg"
 import { RegisterFormInput } from "../components/RegisterFormInput";
 import { useState } from "react";
 
-const API_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3001.app.github.dev";
+// const API_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3001.app.github.dev";
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const Registro = () => {
     const navigate = useNavigate();

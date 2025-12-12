@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const MatchesAvailable = ({ matches = [] }) => {
+    const navigate = useNavigate();
     return (
         <div className="card p-4 mb-4 dashboard-card">
 
@@ -21,9 +23,13 @@ const MatchesAvailable = ({ matches = [] }) => {
 
                             <div className="d-flex justify-content-between align-items-center">
                                 <span className="text-muted">Jugadores: 2/4</span>
-                                <button className="btn btn-outline-primary btn-sm">
+                                <button
+                                    className="btn btn-outline-primary btn-sm"
+                                    onClick={() => navigate("/partidos")}
+                                >
                                     Unirse
                                 </button>
+
                             </div>
                         </div>
                     </div>

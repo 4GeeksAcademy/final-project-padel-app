@@ -148,9 +148,36 @@ class Match(db.Model):
             "contact_phone": self.contact_phone,
             "description": self.description,
             "status": self.status,
-            "court_id": self.court_id,
-            "organized_id": self.organized_id,
             "type": self.type,
+
+            # ORGANIZADOR (tu relación se llama "organized")
+            "organizador": {
+                "id": self.organized.id,
+                "username": self.organized.username,
+                "nombre": f"{self.organized.firstname} {self.organized.lastname}",
+                "foto": self.organized.profile_photo
+            } if self.organized else None,
+
+            # PARTICIPANTES
+            "participantes": [
+                {
+                    "id": u.id,
+                    "username": u.username,
+                    "nombre": f"{u.firstname} {u.lastname}",
+                    "foto": u.profile_photo,
+                }
+                for u in self.users
+            ],
+
+            # CANCHA
+            "cancha": {
+                "id": self.court.id,
+                "nombre": self.court.name,
+                "direccion": self.court.address,
+                "ciudad": self.court.city,
+                # Si luego agregas una imagen:
+                "imagen": getattr(self.court, "image_url", None)
+            } if self.court else None,
         }
 
 
