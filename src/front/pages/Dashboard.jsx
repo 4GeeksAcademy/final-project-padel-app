@@ -14,7 +14,9 @@ const Dashboard = () => {
     const [matches, setMatches] = useState([]);
     const [stats, setStats] = useState(null);
 
-    // Cargar datos del usuario
+    // -------------------------------------------------
+    // Cargar datos del usuario autenticado
+    // -------------------------------------------------
     useEffect(() => {
         const loadUser = async () => {
             const token = localStorage.getItem("token");
@@ -52,7 +54,9 @@ const Dashboard = () => {
         loadUser();
     }, []);
 
-
+    // -------------------------------------------------
+    // Cargar partidos del usuario
+    // -------------------------------------------------
     const loadMatches = async (token, userId) => {
         try {
             const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/users/${userId}/matches`, {
@@ -74,49 +78,3 @@ const Dashboard = () => {
             console.error("Error cargando matches:", error);
         }
     };
-
-
-    const loadStats = async (token) => {
-        try {
-            const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats", {
-                headers: {
-                    "Authorization": "Bearer " + token
-                }
-            });
-            const data = await res.json();
-            setStats(data || null);
-        } catch (error) {
-            console.error("Error cargando stats:", error);
-        }
-    };
-
-    if (!user) return <div>Cargando dashboard...</div>;
-
-    return (
-        <div className="dashboard-container d-flex">
-            <Sidebar user={user} />
-
-            <div className="main-content flex-grow-1">
-                <Header user={user} />
-
-                <div className="container-fluid py-4">
-                    <StatsGrid stats={stats} />
-
-                    <div className="row mt-4">
-                        <div className="col-md-8">
-                            <MatchesAvailable matches={matches} />
-                            <NearbyCourts />
-                        </div>
-
-                        <div className="col-md-4">
-                            <MapCard />
-                            <PlayedMatches matches={matches} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export default Dashboard;
