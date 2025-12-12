@@ -18,15 +18,19 @@ const Main = () => {
         );
     return (
         <React.StrictMode>  
+            <AuthProvider>
             {/* Provide global state to all components */}
             <StoreProvider> 
+                
                 {/* Set up routing for the application */} 
                 <RouterProvider router={router}>
                 </RouterProvider>
             </StoreProvider>
+            </AuthProvider>
         </React.StrictMode>
     );
 }
 
 // Render the Main component into the root DOM element.
 ReactDOM.createRoot(document.getElementById('root')).render(<Main />)
+

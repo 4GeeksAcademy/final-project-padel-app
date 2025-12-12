@@ -10,36 +10,39 @@ export const AuthProvider = ({ children }) => {
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    // Login
+    //login
     const login = useCallback(async (email, password) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(`${backendUrl}/api/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
+    setLoading(true);
+    setError(null);
 
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.message || 'Error en el login');
-            }
+    try {
+        const response = await fetch(`${backendUrl}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
 
-            const data = await response.json();
-            localStorage.setItem('token', data.access_token);
-            setToken(data.access_token);
-            setUser(data.user);
-            return data;
-        } catch (err) {
-            setError(err.message);
-            throw err;
-        } finally {
-            setLoading(false);
+        const data = await response.json(); // <-- leer una sola vez
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Credenciales incorrectas');
         }
-    }, [backendUrl]);
+
+        localStorage.setItem('token', data.access_token);
+        setToken(data.access_token);
+        setUser(data.user);
+
+        return data;
+
+    } catch (err) {
+        setError(err.message);
+        throw err;
+    } finally {
+        setLoading(false);
+    }
+}, [backendUrl]);
 
     // Register
     const register = useCallback(async (registerData) => {

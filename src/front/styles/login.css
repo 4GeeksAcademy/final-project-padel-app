@@ -122,3 +122,21 @@
   color: #0a1f44;
   font-weight: 700;
 }
+
+
+.input-error-message {
+    color: #cc0000; 
+    margin-top: 5px; 
+    margin-bottom: 10px; 
+    display: flex;
+    align-items: center;
+}
+
+.error-icon {
+    margin-right: 5px;
+    font-size: 1em; 
+}
+
+.input-error-message input[name="password"] {
+    border-color: #cc0000;
+}
