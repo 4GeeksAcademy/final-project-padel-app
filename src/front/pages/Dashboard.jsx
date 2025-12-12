@@ -6,13 +6,14 @@ import MatchesAvailable from "../components/MatchesAvailable.jsx";
 import NearbyCourts from "../components/NearbyCourts.jsx";
 import MapCard from "../components/MapCard.jsx";
 import PlayedMatches from "../components/PlayedMatches.jsx";
-
+import {getListCours} from "../service/Courts.js";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
     const [matches, setMatches] = useState([]);
     const [stats, setStats] = useState(null);
+    const [Cours, setCours] = useState([]);
 
     // -------------------------------------------------
     // Cargar datos del usuario autenticado
@@ -42,7 +43,8 @@ const Dashboard = () => {
 
                 const data = await resp.json();
                 setUser(data);
-
+                getCours ();
+          
                 // Cargar partidos usando el ID real del usuario
                 loadMatches(token, data.id);
 
@@ -100,8 +102,15 @@ const Dashboard = () => {
         }
     };
     
+   
+    const getCours = async () =>{
+        const result = await getListCours ();
+        setCours(result);
+        console.log(result);
+        
 
-    // -------------------------------------------------
+    }
+     // -------------------------------------------------
     // Renderizado
     // -------------------------------------------------
     if (!user) return <div>Cargando dashboard...</div>;
