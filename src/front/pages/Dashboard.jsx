@@ -78,3 +78,59 @@ const Dashboard = () => {
             console.error("Error cargando matches:", error);
         }
     };
+
+    // -------------------------------------------------
+    // (Opcional) estadísticas — tu backend NO tiene este endpoint
+    // Por ahora no se usa, pero lo dejo comentado por si lo implementas luego
+    // -------------------------------------------------
+    
+    const loadStats = async (token) => {
+        try {
+            const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            const data = await res.json();
+            setStats(data || null);
+
+        } catch (error) {
+            console.error("Error cargando stats:", error);
+        }
+    };
+    
+
+    // -------------------------------------------------
+    // Renderizado
+    // -------------------------------------------------
+    if (!user) return <div>Cargando dashboard...</div>;
+
+    return (
+        <div className="dashboard-container d-flex">
+            <Sidebar user={user} />
+
+            <div className="main-content flex-grow-1">
+                <Header user={user} />
+
+                <div className="container-fluid py-4">
+                    <StatsGrid stats={stats} />
+
+                    <div className="row mt-4">
+                        <div className="col-md-8">
+                            <MatchesAvailable matches={matches} />
+                            <NearbyCourts />
+                        </div>
+
+                        <div className="col-md-4">
+                            <MapCard />
+                            <PlayedMatches matches={matches} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Dashboard;
