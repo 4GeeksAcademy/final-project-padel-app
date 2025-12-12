@@ -15,31 +15,31 @@ const Dashboard = () => {
     const [stats, setStats] = useState(null);
 
     // Cargar datos del usuario
-    // useEffect(() => {
-    //     const token = localStorage.getItem("token");
+    useEffect(() => {
+        const token = localStorage.getItem("token");
 
-    //     if (!token) {
-    //         console.error("No hay token. Usuario no autenticado.");
-    //         return;
-    //     }
+        if (!token) {
+            console.error("No hay token. Usuario no autenticado.");
+            return;
+        }
 
-    //     fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/me", {
-    //         headers: {
-    //             "Authorization": "Bearer " + token
-    //         }
-    //     })
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             if (data.msg) {
-    //                 console.error("Error autenticación:", data);
-    //                 return;
-    //             }
-    //             setUser(data);
-    //             loadMatches(token);
-    //             loadStats(token);
-    //         })
-    //         .catch(err => console.error("Error cargando usuario:", err));
-    // }, []);
+        fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/me", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.msg) {
+                    console.error("Error autenticación:", data);
+                    return;
+                }
+                setUser(data);
+                loadMatches(token);
+                loadStats(token);
+            })
+            .catch(err => console.error("Error cargando usuario:", err));
+    }, []);
 
     const loadMatches = async (token) => {
         try {
@@ -71,7 +71,7 @@ const Dashboard = () => {
         }
     };
 
-   // if (!user) return <div>Cargando dashboard...</div>;
+   if (!user) return <div>Cargando dashboard...</div>;
 
     return (
         <div className="dashboard-container d-flex">
