@@ -123,13 +123,11 @@
   font-weight: 700;
 }
 
-/* Añade o modifica esta sección en tu archivo login.css */
 
 .input-error-message {
-    color: #cc0000; /* Color rojo brillante para error */
-    font-size: 0.85em; /* Texto pequeño */
-    margin-top: 5px; /* Pequeño margen superior */
-    margin-bottom: 10px; /* Margen inferior para separarlo de los 'rules' o el botón */
+    color: #cc0000; 
+    margin-top: 5px; 
+    margin-bottom: 10px; 
     display: flex;
     align-items: center;
 }
