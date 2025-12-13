@@ -19,12 +19,13 @@ static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../
 app = Flask(__name__)
 
 
-FRONTEND_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3000.app.github.dev"
+# FRONTEND_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3000.app.github.dev"
 
 
-CORS(app, resources={r"/api/*": {"origins": FRONTEND_URL, "supports_credentials": True}})
-print(f"CORS configurado con ÉXITO para origen: {FRONTEND_URL}")
+# CORS(app, resources={r"/api/*": {"origins": FRONTEND_URL, "supports_credentials": True}})
+# print(f"CORS configurado con ÉXITO para origen: {FRONTEND_URL}")
 
+CORS(app)
 
 # ========== CONFIGURACIÓN JWT ==========
 app.config["JWT_SECRET_KEY"] = os.getenv("FLASK_APP_KEY", "dev-secret-key")
