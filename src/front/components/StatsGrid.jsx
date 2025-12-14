@@ -1,6 +1,7 @@
 import React from "react";
 
 const StatsGrid = ({ stats }) => {
+    console.log("STATS =>", stats);
 
     if (!stats) return (
         <div className="card p-4 dashboard-card">
@@ -11,7 +12,8 @@ const StatsGrid = ({ stats }) => {
     );
 
     return (
-        <div className="card p-3">
+        <div className="card p-3 dashboard-card stats-card">
+
             <h5>Estadísticas</h5>
 
             <div className="row text-center">
