@@ -132,32 +132,6 @@ def me():
     return jsonify(user.serialize()), 200
 
 
-@api.route('/auth/forgot-password', methods=['POST'])
-def forgot_password():
-    data = request.get_json() or {}
-    email = data.get('email')
-
-    print("Recibido email:", email)  
-    if not email:
-        raise APIException("email is required", status_code=400)
-
-    user = User.query.filter_by(email=email).first()
-    if not user:
-        print("Email no encontrado")  
-        return jsonify({"message": "Si existe el email, se enviara un enlace"}), 200
-
-    token = secrets.token_urlsafe(32)
-    user.reset_token = token
-    user.reset_token_exp = datetime.utcnow() + timedelta(hours=1)
-    db.session.commit()
-
-    print("Token generado:", token)  
-
-    reset_link = f"http://localhost:5173/reset-password/{token}"
-    print("Reset link:", reset_link)  
-
-    return jsonify({"message": "Si existe el email, se enviara un enlace"}), 200
-
 @api.route('/auth/reset-password', methods=['POST'])
 def reset_password():
     data = request.get_json() or {}
