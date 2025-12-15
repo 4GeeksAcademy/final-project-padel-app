@@ -1,46 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getDistanceInKm } from "../utils/functions";
 
-const NearbyCourts = () => {
-    const navigate = useNavigate();
-
-    const courts = [
-        {
-            id: 1,
-            name: "Club Deportivo Norte",
-            address: "Av. Libertad 1232",
-            distance: "2.3 km",
-            price: "45€ Hora",
-            mapUrl:
-                "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.900000123!2d-3.703790!3d40.416775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422997df!2sMadrid!5e0!3m2!1ses!2es!4v1234567890",
-        },
-        {
-            id: 2,
-            name: "Padel Center Sur",
-            address: "Calle Fútbol 22",
-            distance: "1.1 km",
-            price: "40€ Hora",
-            mapUrl:
-                "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.900000122!2d-3.703190!3d40.416375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422997df!2sMadrid!5e0!3m2!1es!2es!4v1234567891",
-        },
-        {
-            id: 3,
-            name: "Centro Padel Este",
-            address: "Calle Tenis 19",
-            distance: "3.0 km",
-            price: "42€ Hora",
-            mapUrl:
-                "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.900000121!2d-3.703990!3d40.416975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422997df!2sMadrid!5e0!3m2!1es!2es!4v1234567892",
-        },
-    ];
-
+const NearbyCourts = ({ data }) => {
     const [selectedCourt, setSelectedCourt] = useState(null);
+    const [userLocation, setUserLocation] = useState(null);
+    const [coursDintance, setCoursDintance] = useState([]);
+    const [coursNearby, setCoursNearby] = useState();
+    const navigate = useNavigate();
+    console.log(data);
+
+    useEffect(() => {
+        getLocation();
+    }, [])
+
+
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ latitude, longitude })
+                },
+                (error) => {
+                    console.error("Error obteniendo ubicación:", error);
+                }
+            );
+        } else {
+            alert("Geolocalización no soportada por tu navegador");
+        }
+    };
+
+    useEffect(() => {
+        if (!userLocation || data.length === 0) return;
+        const pistaCercana = data.map((course) => {
+            const distance = getDistanceInKm(
+                userLocation.latitude,
+                userLocation.longitude,
+                course.latitude,
+                course.longitude
+            );
+            return {...course,distance};
+        }).filter(element=>element.distance <= 2)
+        console.log(pistaCercana);
+        setCoursDintance(pistaCercana)
+    }, [data, userLocation]);
 
     return (
         <div className="card p-4 dashboard-card">
             <h5 className="fw-bold mb-3">Canchas Cercanas</h5>
 
-            {courts.map((court) => (
+            {coursDintance.map((court) => (
+
                 <div
                     key={court.id}
                     className="border rounded p-3 mb-3 d-flex justify-content-between"
@@ -48,8 +59,11 @@ const NearbyCourts = () => {
                     <div>
                         <strong>{court.name}</strong>
                         <p className="text-muted m-0">{court.address}</p>
-                        <p className="text-muted m-0">
+                        {/* <p className="text-muted m-0">
                             {court.distance} - {court.price}
+                        </p> */}
+                        <p className="text-muted m-0">
+                            {court.distance.toFixed(2)}Km
                         </p>
                     </div>
 
