@@ -42,7 +42,7 @@ const Dashboard = () => {
                 }
 
                 const data = await resp.json();
-                setUser(data);
+                setUser([data]);
                 getCours ();
           
                 // Cargar partidos usando el ID real del usuario
@@ -128,7 +128,7 @@ const Dashboard = () => {
                     <div className="row mt-4">
                         <div className="col-md-8">
                             <MatchesAvailable matches={matches} />
-                            <NearbyCourts />
+                            <NearbyCourts data={Cours} />
                         </div>
 
                         <div className="col-md-4">
