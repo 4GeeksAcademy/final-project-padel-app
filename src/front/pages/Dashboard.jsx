@@ -6,13 +6,18 @@ import MatchesAvailable from "../components/MatchesAvailable.jsx";
 import NearbyCourts from "../components/NearbyCourts.jsx";
 import MapCard from "../components/MapCard.jsx";
 import PlayedMatches from "../components/PlayedMatches.jsx";
-import {getListCours} from "../service/Courts.js";
+import { getListCours } from "../service/Courts.js";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
     const [matches, setMatches] = useState([]);
-    const [stats, setStats] = useState(null);
+    const [stats, setStats] = useState({
+        total_matches: 15,
+        matches_won: 7,
+        matches_lost: 8,
+        isMock: true  // esto es pa colcoar número per se borran cuando el usuario registre datos
+    });
     const [Cours, setCours] = useState([]);
 
     // -------------------------------------------------
@@ -81,11 +86,32 @@ const Dashboard = () => {
         }
     };
 
+    useEffect(() => {
+        if (!matches) return;
+
+        // 👇 SI NO HAY PARTIDOS REALES, NO TOCAMOS EL MOCK
+        if (matches.length === 0) return;
+
+        // 👇 DESDE AQUÍ TODO ES REAL
+        const total = matches.length;
+        const won = matches.filter(m => m.status === "won").length;
+        const lost = matches.filter(m => m.status === "lost").length;
+
+        setStats({
+            total_matches: total,
+            matches_won: won,
+            matches_lost: lost,
+            isMock: false
+        });
+
+    }, [matches]);
+
+
     // -------------------------------------------------
     // (Opcional) estadísticas — tu backend NO tiene este endpoint
     // Por ahora no se usa, pero lo dejo comentado por si lo implementas luego
     // -------------------------------------------------
-    
+
     const loadStats = async (token) => {
         try {
             const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats", {
@@ -101,16 +127,16 @@ const Dashboard = () => {
             console.error("Error cargando stats:", error);
         }
     };
-    
-   
-    const getCours = async () =>{
-        const result = await getListCours ();
+
+
+    const getCours = async () => {
+        const result = await getListCours();
         setCours(result);
         console.log(result);
-        
+
 
     }
-     // -------------------------------------------------
+    // -------------------------------------------------
     // Renderizado
     // -------------------------------------------------
     if (!user) return <div>Cargando dashboard...</div>;
