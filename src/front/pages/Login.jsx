@@ -8,8 +8,8 @@ export default function Login() {
   const { login } = useAuth();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  // const [remember, setRemember] = useState(false); // recordarme eliminado
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,9 +22,9 @@ export default function Login() {
     }
     setError(null);
     setLoading(true);
+
     try {
-      await login(email, password);
-      if (!remember) {}
+      await login(email, password /*, remember*/); // recordarme eliminado
       navigate("/dashboard");
     } catch (err) {
       setError("Usuario o contraseña incorrecta");
@@ -38,11 +38,18 @@ export default function Login() {
       <div className="login-card">
         <h1 className="login-title">INICIAR SESIÓN</h1>
         <p className="login-subtitle">¡Bienvenido de nuevo!</p>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="on">
           <label className="label">
             Email <span className="required">*</span>
           </label>
-          <input name="email" type="text" placeholder="Ingresa tu email" required className="input" />
+          <input
+            name="email"
+            type="email"
+            placeholder="Ingresa tu email"
+            required
+            className="input"
+            autoComplete="username"
+          />
           <label className="label">
             Contraseña <span className="required">*</span>
           </label>
@@ -53,21 +60,21 @@ export default function Login() {
               placeholder="••••••••"
               required
               className="input password-input"
+              autoComplete="current-password"
             />
             <span
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
-              style={{ cursor: "pointer" }}
             >
               {showPassword ? "👁️" : "🙈"}
             </span>
           </div>
           {error && (
             <div className="input-error-message">
-              <span className="error-icon">⚠️</span> 
-              {error}
+              <span className="error-icon">⚠️</span> {error}
             </div>
           )}
+          {/*
           <div className="remember">
             <input 
               type="checkbox" 
@@ -77,6 +84,7 @@ export default function Login() {
             />
             <label className="label">Recordarme</label>
           </div>
+          */}
           <div className="forgot">
             <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
           </div>
