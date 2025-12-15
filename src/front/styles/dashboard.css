@@ -1,80 +1,149 @@
+/* ===============================
+   LAYOUT GENERAL
+   =============================== */
+
 .dashboard-container {
   display: flex;
   width: 100%;
+  min-height: 100vh;
+  background: #f4f6fb;
 }
 
 .main-content {
   flex-grow: 1;
-  background-color: #f8f9fa;
-  padding: 1rem;
-}
-/* Ítems del sidebar */
-.sidebar-item {
-  color: #6c757d; /* gris */
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
-}
-
-.sidebar-item:hover {
-  background-color: #e9f2ff;
-  color: #0d6efd; /* azul */
-}
-
-.sidebar-item:hover i {
-  color: #0d6efd;
-}
-
-/* Ítem activo (Inicio por defecto) */
-.active-item {
-  background-color: #0d6efd;
-  color: white !important;
-}
-
-.active-item i {
-  color: white !important;
-}
-
-.dashboard-card {
-  transition: all 0.2s ease-in-out;
-}
-
-.dashboard-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+  background: linear-gradient(180deg, #f9fafc, #f4f6fb);
 }
 
 /* ===============================
-   ESTADÍSTICAS – TARJETA PÁDEL
+   SIDEBAR MODERNA
+   =============================== */
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sidebar-item i {
+  font-size: 1.1rem;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.sidebar-item:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+}
+
+.sidebar-item:hover i {
+  transform: translateX(4px);
+  color: #2563eb;
+}
+
+/* Activo */
+.active-item {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #ffffff !important;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.active-item i {
+  color: #ffffff !important;
+}
+
+/* ===============================
+   TARJETAS DASHBOARD (GLASS)
+   =============================== */
+
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   TARJETA ESTADÍSTICAS (PÁDEL)
    =============================== */
 
 .stats-card {
-  background: linear-gradient(135deg, #f2faf5, #ffffff);
-  border-left: 6px solid #2e7d32; /* verde pádel */
+  background: linear-gradient(
+    135deg,
+    rgba(46, 125, 50, 0.15),
+    rgba(255, 255, 255, 0.85)
+  );
+  border-radius: 18px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Reutiliza el hover del dashboard-card */
-.stats-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+/* Glow sutil */
+.stats-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(46, 125, 50, 0.25),
+    transparent 60%
+  );
+  opacity: 0.6;
 }
 
-/* Título de estadísticas */
 .stats-card h5 {
   color: #2e7d32;
   font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-/* Valores numéricos */
 .stats-card h3 {
   color: #1b5e20;
-  font-size: 2.2rem;
-  font-weight: 700;
+  font-size: 2.4rem;
+  font-weight: 800;
   margin-bottom: 0.25rem;
 }
 
-/* Texto descriptivo */
 .stats-card p {
   color: #4f6f52;
-  font-size: 0.95rem;
-  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+/* Hover moderno */
+.stats-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 45px rgba(46, 125, 50, 0.25);
+}
+
+/* ===============================
+   ANIMACIONES SUAVES
+   =============================== */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-card,
+.stats-card {
+  animation: fadeUp 0.45s ease forwards;
 }

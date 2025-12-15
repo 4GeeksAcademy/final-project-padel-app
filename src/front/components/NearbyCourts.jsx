@@ -42,7 +42,7 @@ const NearbyCourts = ({ data,idUser }) => {
                 course.longitude
             );
             return { ...course, distance };
-        }).filter(element => element.distance > 2)
+        }).filter(element => element.distance <= 4)
         console.log(pistaCercana);
         setCoursDintance(pistaCercana)
     }, [data, userLocation]);
