@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDistanceInKm } from "../utils/functions";
 
-const NearbyCourts = ({ data }) => {
+const NearbyCourts = ({ data,idUser }) => {
     const [selectedCourt, setSelectedCourt] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
     const [coursDintance, setCoursDintance] = useState([]);
     const [coursNearby, setCoursNearby] = useState();
     const navigate = useNavigate();
     console.log(data);
-
+    console.log(idUser);
+    
     useEffect(() => {
         getLocation();
     }, [])
@@ -40,8 +41,8 @@ const NearbyCourts = ({ data }) => {
                 course.latitude,
                 course.longitude
             );
-            return {...course,distance};
-        }).filter(element=>element.distance <= 2)
+            return { ...course, distance };
+        }).filter(element => element.distance > 2)
         console.log(pistaCercana);
         setCoursDintance(pistaCercana)
     }, [data, userLocation]);
@@ -49,41 +50,54 @@ const NearbyCourts = ({ data }) => {
     return (
         <div className="card p-4 dashboard-card">
             <h5 className="fw-bold mb-3">Canchas Cercanas</h5>
+            {
+            coursDintance.length > 0 ?
+                coursDintance.map((court) => (
 
-            {coursDintance.map((court) => (
-
-                <div
-                    key={court.id}
-                    className="border rounded p-3 mb-3 d-flex justify-content-between"
-                >
-                    <div>
-                        <strong>{court.name}</strong>
-                        <p className="text-muted m-0">{court.address}</p>
-                        {/* <p className="text-muted m-0">
+                    <div
+                        key={court.id}
+                        className="border rounded p-3 mb-3 d-flex justify-content-between"
+                    >
+                        <div>
+                            <strong>{court.name}</strong>
+                            <p className="text-muted m-0">{court.address}</p>
+                            {/* <p className="text-muted m-0">
                             {court.distance} - {court.price}
                         </p> */}
-                        <p className="text-muted m-0">
-                            {court.distance.toFixed(2)}Km
-                        </p>
-                    </div>
+                            <p className="text-muted m-0">
+                                {court.distance.toFixed(2)}Km
+                            </p>
+                        </div>
 
-                    <div className="d-flex flex-column gap-2">
-                        <button
-                            className="btn btn-outline-primary btn-sm"
-                            onClick={() => setSelectedCourt(court)}
-                        >
-                            Ver mapa
-                        </button>
+                        <div className="d-flex flex-column gap-2">
+                            <button
+                                className="btn btn-outline-primary btn-sm"
+                                onClick={() => setSelectedCourt(court)}
+                            >
+                                Ver mapa
+                            </button>
 
-                        <button
-                            className="btn btn-primary btn-sm"
-                            onClick={() => navigate("/crear-partido")}
-                        >
-                            Crear partido
-                        </button>
+                            <button
+                                className="btn btn-primary btn-sm"
+                                //  onClick={() => navigate("/crear-partido")}
+                                // onClick={() => navigate("/crear-partido",{
+                                //     state:{nombre:`${court.name}`}
+                                // })
+                                // onClick={() => navigate("/dashboard/crear-partido",{
+                                //     state:{id:court.id,name:court.name}
+                                // })
+                                onClick={() => navigate("/crear-partido",{
+                                    state:{id:court.id,name:court.name, id_user:idUser}
+                                })
+                            }
+                            >
+                                Crear partido
+                            </button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                )) 
+                : <p style={{ textAlign: "center" }}>No hay pistas cercanas</p>
+                }
 
             {/* MODAL */}
             {selectedCourt && (
