@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 8ab18d4c7260
+Revision ID: 4d52c0b97f0a
 Revises: 
-Create Date: 2025-12-15 18:32:09.885523
+Create Date: 2025-12-15 18:54:14.843849
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '8ab18d4c7260'
+revision = '4d52c0b97f0a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,8 +27,8 @@ def upgrade():
     sa.Column('city', sa.String(length=50), nullable=True),
     sa.Column('type', sa.String(length=10), nullable=True),
     sa.Column('phone', sa.String(length=20), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
@@ -48,8 +48,8 @@ def upgrade():
     sa.Column('longitude', sa.Float(), nullable=True),
     sa.Column('city', sa.String(length=100), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('reset_token', sa.String(length=128), nullable=True),
     sa.Column('reset_token_exp', sa.DateTime(), nullable=True),
@@ -61,8 +61,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('day', sa.DateTime(), nullable=True),
     sa.Column('time', sa.DateTime(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('contact_phone', sa.String(length=50), nullable=True),
     sa.Column('description', sa.String(length=500), nullable=True),
@@ -79,8 +79,8 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('match_id', sa.Integer(), nullable=False),
     sa.Column('is_player', sa.Boolean(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['match_id'], ['matchs.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
