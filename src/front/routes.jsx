@@ -11,16 +11,21 @@ import Partidos from "./pages/Partidos.jsx";
 import Jugadores from "./pages/Jugadores.jsx";
 import Cancha from "./pages/Cancha.jsx";
 import CrearPartido from "./pages/CrearPartido.jsx";
-import Dashboard from "./pages/Dashboard"; 
+import Dashboard from "./pages/Dashboard";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/register" element={<Registro />} />
       <Route path="/dashboard" element={<Dashboard />} />
-       <Route path="/registro" element={<Registro />} />
+      <Route path="/registro" element={<Registro />} />
       <Route path="/partidos" element={<Partidos />} />
       <Route path="/jugadores" element={<Jugadores />} />
       <Route path="/cancha/:id" element={<Cancha />} />
@@ -32,4 +37,4 @@ export const router = createBrowserRouter(
 
   )
 );
-      
+

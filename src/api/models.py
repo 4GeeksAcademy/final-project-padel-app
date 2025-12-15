@@ -33,7 +33,9 @@ class User(db.Model):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime)
-
+    reset_token: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    reset_token_exp: Mapped[datetime | None] = mapped_column(
+        DateTime, nullable=True)
     # Relationships
     organized_matches: Mapped[List["Match"]] = relationship(
         "Match", back_populates="organized", foreign_keys="Match.organized_id")
@@ -62,6 +64,8 @@ class User(db.Model):
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
             "deleted_at": self.deleted_at.isoformat() if self.deleted_at else None,
+            "reset_token": self.reset_token,
+            "reset_token_exp": self.reset_token_exp.isoformat() if self.reset_token_exp else None,
         }
 
     def set_password(self, password):
@@ -210,3 +214,7 @@ class MatchUser(db.Model):
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
             "deleted_at": self.deleted_at.isoformat() if self.deleted_at else None,
         }
+
+
+reset_token = db.Column(db.String(128), nullable=True)
+reset_token_exp = db.Column(db.DateTime, nullable=True)

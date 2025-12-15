@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
             body: JSON.stringify({ email, password }),
         });
 
-        const data = await response.json(); // <-- leer una sola vez
+        const data = await response.json(); 
 
         if (!response.ok) {
             throw new Error(data.message || 'Credenciales incorrectas');

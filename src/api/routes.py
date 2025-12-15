@@ -2,10 +2,51 @@ from flask import request, jsonify, Blueprint
 from api.models import db, User, Court, Match, MatchUser
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from api.utils import APIException
-from datetime import datetime
+from datetime import datetime, timedelta
+import secrets
+import smtplib
+from email.mime.text import MIMEText
+FRONTEND_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3000.app.github.dev"
 
 api = Blueprint('api', __name__)
 
+# Configuración de correo
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+SMTP_USER = "thebestvesionofme@gmail.com"
+SMTP_PASSWORD = "gsea tpla iqeg lyib"  
+
+@api.route('/auth/forgot-password', methods=['POST'])
+def forgot_password():
+    data = request.get_json() or {}
+    email = data.get('email')
+
+    if not email:
+        raise APIException("email es requerido", status_code=400)
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"message": "Si el email existe, se enviará un enlace"}), 200
+
+    token = secrets.token_urlsafe(32)
+    user.reset_token = token
+    user.reset_token_exp = datetime.utcnow() + timedelta(hours=1)
+    db.session.commit()
+
+    reset_link = f"{FRONTEND_URL}/reset-password/{token}"
+    mensaje = f"Hola {user.firstname},\n\nPara restablecer tu contraseña, haz click en el siguiente enlace:\n{reset_link}\n\nSi no solicitaste esto, ignora el correo."
+
+    msg = MIMEText(mensaje)
+    msg['Subject'] = "Recupera tu contraseña"
+    msg['From'] = SMTP_USER
+    msg['To'] = user.email
+
+    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASSWORD)
+        server.send_message(msg)
+
+    return jsonify({"message": "Si el email existe, se enviará un enlace"}), 200
 # ======================================
 # AUTH ENDPOINTS
 # ======================================
@@ -89,6 +130,53 @@ def me():
         raise APIException('user not found', status_code=404)
 
     return jsonify(user.serialize()), 200
+
+
+@api.route('/auth/forgot-password', methods=['POST'])
+def forgot_password():
+    data = request.get_json() or {}
+    email = data.get('email')
+
+    print("Recibido email:", email)  
+    if not email:
+        raise APIException("email is required", status_code=400)
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        print("Email no encontrado")  
+        return jsonify({"message": "Si existe el email, se enviara un enlace"}), 200
+
+    token = secrets.token_urlsafe(32)
+    user.reset_token = token
+    user.reset_token_exp = datetime.utcnow() + timedelta(hours=1)
+    db.session.commit()
+
+    print("Token generado:", token)  
+
+    reset_link = f"http://localhost:5173/reset-password/{token}"
+    print("Reset link:", reset_link)  
+
+    return jsonify({"message": "Si existe el email, se enviara un enlace"}), 200
+
+@api.route('/auth/reset-password', methods=['POST'])
+def reset_password():
+    data = request.get_json() or {}
+    token = data.get('token')
+    new_password = data.get('password')
+
+    if not token or not new_password:
+        raise APIException("token y password son requeridos", status_code=400)
+
+    user = User.query.filter_by(reset_token=token).first()
+    if not user or not user.reset_token_exp or user.reset_token_exp < datetime.utcnow():
+        raise APIException("token invalido o expirado", status_code=400)
+
+    user.set_password(new_password)
+    user.reset_token = None
+    user.reset_token_exp = None
+    db.session.commit()
+
+    return jsonify({"message": "Contraseña actualizada"}), 200
 
 # ======================================
 # USERS
