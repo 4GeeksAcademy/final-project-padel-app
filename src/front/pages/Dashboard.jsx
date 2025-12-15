@@ -10,7 +10,8 @@ import { getListCours } from "../service/Courts.js";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
+    const [user, setUser] = useState([]);
     const [matches, setMatches] = useState([]);
     const [stats, setStats] = useState({
         total_matches: 15,
@@ -24,7 +25,48 @@ const Dashboard = () => {
     // Cargar datos del usuario autenticado
     // -------------------------------------------------
     useEffect(() => {
-        const loadUser = async () => {
+        // const loadUser = async () => {
+        //     const token = localStorage.getItem("token");
+
+        //     if (!token) {
+        //         console.error("No hay token. Usuario no autenticado.");
+        //         return;
+        //     }
+
+        //     try {
+        //         const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/me", {
+        //             method: "GET",
+        //             headers: {
+        //                 "Authorization": "Bearer " + token
+        //             }
+        //         });
+
+        //         if (!resp.ok) {
+        //             const text = await resp.text();
+        //             console.error("Error en /api/me:", resp.status, text);
+        //             return;
+        //         }
+
+        //         const data = await resp.json();
+        //         console.log([data]);
+                
+        //         setUser([data]);
+        //         getCours ();
+          
+        //         // Cargar partidos usando el ID real del usuario
+        //         loadMatches(token, data.id);
+
+        //     } catch (error) {
+        //         console.error("Error cargando usuario:", error);
+        //     }
+        // };
+        getCours ();
+        loadUser();
+    }, []);
+
+
+    //Cargando datos del usuario logueado
+    const loadUser = async () => {
             const token = localStorage.getItem("token");
 
             if (!token) {
@@ -47,8 +89,10 @@ const Dashboard = () => {
                 }
 
                 const data = await resp.json();
-                setUser([data]);
-                getCours ();
+                console.log(data);
+                
+                setUser(data);
+                
           
                 // Cargar partidos usando el ID real del usuario
                 loadMatches(token, data.id);
@@ -57,9 +101,6 @@ const Dashboard = () => {
                 console.error("Error cargando usuario:", error);
             }
         };
-
-        loadUser();
-    }, []);
 
     // -------------------------------------------------
     // Cargar partidos del usuario
@@ -154,7 +195,7 @@ const Dashboard = () => {
                     <div className="row mt-4">
                         <div className="col-md-8">
                             <MatchesAvailable matches={matches} />
-                            <NearbyCourts data={Cours} />
+                            <NearbyCourts data={Cours} idUser={user.id} />
                         </div>
 
                         <div className="col-md-4">
