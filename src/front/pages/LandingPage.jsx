@@ -28,29 +28,30 @@ export const LandingPage = () => {
   return (
     <>
       {/* NAVBAR FIXED */}
-      <nav className="navbar">
-        <div className="navbar-content">
-          <div className="logo">MVPadel</div>
-          <div className="nav-links">
-            <a href="#inicio" className="nav-link">
-              Inicio
-            </a>
-            <a href="#features" className="nav-link">
-              Características
-            </a>
-            <a href="#how" className="nav-link">
-              Cómo Funciona
-            </a>
-            <button className="btn-nav btn-signup" onClick={handleSignup}>
-              Registrarse
-            </button>
-            <button className="btn-nav btn-login" onClick={handleLogin}>
-              Iniciar Sesión
-            </button>
+      <div className="landing-page">
+        <nav className="navbar">
+          <div className="navbar-content">
+            <div className="logo">MVPadel</div>
+            <div className="nav-links">
+              <a href="#inicio" className="nav-link">
+                Inicio
+              </a>
+              <a href="#features" className="nav-link">
+                Características
+              </a>
+              <a href="#how" className="nav-link">
+                Cómo Funciona
+              </a>
+              <button className="btn-nav btn-signup" onClick={handleSignup}>
+                Registrarse
+              </button>
+              <button className="btn-nav btn-login" onClick={handleLogin}>
+                Iniciar Sesión
+              </button>
+            </div>
           </div>
-        </div>
-      </nav>
-
+        </nav>
+      </div>
       {/* CONTAINER PRINCIPAL CON GRADIENTE FIJO */}
       <div className="landing-container"></div>
 

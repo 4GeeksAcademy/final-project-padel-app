@@ -6,7 +6,9 @@ import "../styles/sidebar.css";
 
 const Sidebar = () => {
     return (
-        <div className="sidebar-container">
+        <div className="dashboard-sidebar">
+            
+
             <NavLink to="/dashboard" className="sidebar-item">
                 <i className="fa-solid fa-house sidebar-icon"></i>
                 <span>Inicio</span>

@@ -1,0 +1,10 @@
+.join-btn {
+  background: var(--padel-green-500);
+  color: white;
+  border-radius: 10px;
+  border: none;
+}
+
+.join-btn:hover {
+  background: var(--padel-green-700);
+}

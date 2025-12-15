@@ -738,7 +738,7 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-  css * {
+css * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -763,7 +763,7 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+.landing-page {
   font-family: var(--font-family-base);
   background-color: var(--color-background);
   color: var(--color-text);
@@ -771,7 +771,7 @@ body {
 }
 
 /* NAVBAR */
-.navbar {
+.landing-page .navbarr {
   position: fixed;
   top: 0;
   left: 0;
@@ -788,7 +788,7 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-.navbar-content {
+.landing-page .scrollable-cont {
   max-width: var(--container-lg);
   margin: 0 auto;
   display: flex;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar.jsx";
 import Header from "../components/Header.jsx";
 import StatsGrid from "../components/StatsGrid.jsx";
@@ -10,6 +11,7 @@ import { getListCours } from "../service/Courts.js";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     // const [user, setUser] = useState(null);
     const [user, setUser] = useState([]);
     const [matches, setMatches] = useState([]);
@@ -21,6 +23,7 @@ const Dashboard = () => {
     });
     const [Cours, setCours] = useState([]);
 
+    
     // -------------------------------------------------
     // Cargar datos del usuario autenticado
     // -------------------------------------------------
@@ -49,10 +52,10 @@ const Dashboard = () => {
 
         //         const data = await resp.json();
         //         console.log([data]);
-                
+
         //         setUser([data]);
         //         getCours ();
-          
+
         //         // Cargar partidos usando el ID real del usuario
         //         loadMatches(token, data.id);
 
@@ -60,47 +63,47 @@ const Dashboard = () => {
         //         console.error("Error cargando usuario:", error);
         //     }
         // };
-        getCours ();
+        getCours();
         loadUser();
     }, []);
 
 
     //Cargando datos del usuario logueado
     const loadUser = async () => {
-            const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
 
-            if (!token) {
-                console.error("No hay token. Usuario no autenticado.");
+        if (!token) {
+            console.error("No hay token. Usuario no autenticado.");
+            return;
+        }
+
+        try {
+            const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/me", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!resp.ok) {
+                const text = await resp.text();
+                console.error("Error en /api/me:", resp.status, text);
                 return;
             }
 
-            try {
-                const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/me", {
-                    method: "GET",
-                    headers: {
-                        "Authorization": "Bearer " + token
-                    }
-                });
+            const data = await resp.json();
+            console.log(data);
 
-                if (!resp.ok) {
-                    const text = await resp.text();
-                    console.error("Error en /api/me:", resp.status, text);
-                    return;
-                }
+            setUser(data);
 
-                const data = await resp.json();
-                console.log(data);
-                
-                setUser(data);
-                
-          
-                // Cargar partidos usando el ID real del usuario
-                loadMatches(token, data.id);
 
-            } catch (error) {
-                console.error("Error cargando usuario:", error);
-            }
-        };
+            // Cargar partidos usando el ID real del usuario
+            loadMatches(token, data.id);
+
+        } catch (error) {
+            console.error("Error cargando usuario:", error);
+        }
+    };
 
     // -------------------------------------------------
     // Cargar partidos del usuario
@@ -183,16 +186,28 @@ const Dashboard = () => {
     if (!user) return <div>Cargando dashboard...</div>;
 
     return (
-        <div className="dashboard-container d-flex">
-            <Sidebar user={user} />
+        <div className="dashboard-wrapper">
 
-            <div className="main-content flex-grow-1">
-                <Header user={user} />
+            {/* NAVBAR SUPERIOR */}
+            <Header user={user} />
 
-                <div className="container-fluid py-4">
-                    <StatsGrid stats={stats} />
+            <div className="dashboard-shell">
 
-                    <div className="row mt-4">
+                {/* SIDEBAR */}
+                <Sidebar user={user} />
+
+                {/* CONTENIDO */}
+                <main className="main-content">
+
+                    {/* ESTADÍSTICAS ARRIBA */}
+                    <div className="row mb-4">
+                        <div className="col-12">
+                            <StatsGrid stats={stats} />
+                        </div>
+                    </div>
+
+                    {/* CONTENIDO PRINCIPAL */}
+                    <div className="row">
                         <div className="col-md-8">
                             <MatchesAvailable matches={matches} />
                             <NearbyCourts data={Cours} idUser={user.id} />
@@ -203,10 +218,13 @@ const Dashboard = () => {
                             <PlayedMatches matches={matches} />
                         </div>
                     </div>
-                </div>
+
+                </main>
             </div>
         </div>
     );
+
+
 };
 
 export default Dashboard;
