@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import secrets
 import smtplib
 from email.mime.text import MIMEText
-FRONTEND_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3000.app.github.dev"
+FRONTEND_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3000.app.github.dev"  
 
 api = Blueprint('api', __name__)
 
@@ -150,7 +150,7 @@ def reset_password():
     user.reset_token_exp = None
     db.session.commit()
 
-    return jsonify({"message": "Contraseña actualizada"}), 200
+    return jsonify({"message": "Contraseña actualizada"}), 200 
 
 # ======================================
 # USERS
