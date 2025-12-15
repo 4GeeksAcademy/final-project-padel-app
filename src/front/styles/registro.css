@@ -1,0 +1,101 @@
+.container-fluid {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, rgb(144, 229, 244), rgb(255, 177, 154));
+}
+
+.px-5 {
+  width: 100%;
+  max-width: 420px;
+  padding: 45px 40px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+}
+
+.px-5 h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 30px;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgb(0, 180, 255), rgb(255, 140, 100));
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2b2b2b;
+}
+
+.required {
+  color: #d60000;
+  margin-left: 3px;
+}
+
+.px-5 input,
+.px-5 select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 6px;
+  border-radius: 16px;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.row-fields {
+  display: flex;
+  gap: 14px;
+}
+
+.field {
+  flex: 1;
+}
+
+.error {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #d60000;
+}
+
+.px-5 button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgb(144, 229, 244), rgb(255, 177, 154));
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.auth-footer {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.auth-footer span {
+  margin-left: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(135deg, black, rgb(255, 149, 113));
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 480px) {
+  .row-fields {
+    flex-direction: column;
+  }
+}

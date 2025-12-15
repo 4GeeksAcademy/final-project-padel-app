@@ -1,142 +1,149 @@
 import { useNavigate } from "react-router-dom";
-import fondoRegistro from "../assets/img/imagen2.jpg"
 import { RegisterFormInput } from "../components/RegisterFormInput";
 import { useState } from "react";
+import "../styles/registro.css";
 
-// const API_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3001.app.github.dev";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const Registro = () => {
-    const navigate = useNavigate();
-    const [values, setValues] = useState({
-        firstname: "", 
-        lastname: "", 
-        username: "", 
-        edad: "",
-        genero: "",
-        email: "",
-        password: ""
-    });
+  const navigate = useNavigate();
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setValues({
-            ...values, [name]: value,
-        })
+  const [values, setValues] = useState({
+    firstname: "",
+    lastname: "",
+    username: "",
+    edad: "",
+    genero: "",
+    email: "",
+    password: ""
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!values.firstname.trim()) newErrors.firstname = "El nombre es obligatorio";
+    if (!values.lastname.trim()) newErrors.lastname = "El apellido es obligatorio";
+    if (!values.email.trim()) newErrors.email = "El correo es obligatorio";
+    if (!values.genero) newErrors.genero = "Seleccione un género";
+
+    if (!values.edad) newErrors.edad = "La edad es obligatoria";
+    else if (values.edad < 18) newErrors.edad = "Debes ser mayor de 18 años";
+
+    if (!values.password) {
+      newErrors.password = "La contraseña es obligatoria";
+    } else if (values.password.length < 8) {
+      newErrors.password = "Mínimo 8 caracteres";
+    } else if (!/[A-Z]/.test(values.password)) {
+      newErrors.password = "Debe tener una mayúscula";
+    } else if (!/[a-z]/.test(values.password)) {
+      newErrors.password = "Debe tener una minúscula";
+    } else if (!/[0-9]/.test(values.password)) {
+      newErrors.password = "Debe tener un número";
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(values.password)) {
+      newErrors.password = "Debe tener un carácter especial";
     }
 
-    const registrarse = async (e) => {
-        e.preventDefault();
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-        
-        const dataToSend = {
-            firstname: values.firstname,
-            lastname: values.lastname,
-            username: values.username || values.email, 
-            age: values.edad,
-            gender: values.genero,
-            email: values.email,
-            password: values.password
-        };
+  const registrarse = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
 
-        try {
-            const response = await fetch(`${API_URL}/api/auth/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dataToSend),
-            });
+    const dataToSend = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      username: values.username || values.email,
+      age: values.edad,
+      gender: values.genero,
+      email: values.email,
+      password: values.password
+    };
 
-            // 2. Manejo de la respuesta
-            if (response.ok) {
-                const result = await response.json();
-                console.log("Registro exitoso:", result);
-                alert("Registro exitoso. ¡Inicia sesión!");
-                // Redirigir al login solo después del éxito
-                navigate("/login");
-            } else {
-                const errorData = await response.json();
-                console.error("Error en el registro (API):", errorData);
-                alert(`Error al registrarse: ${errorData.msg || 'Credenciales inválidas o usuario ya existe.'}`);
-            }
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend)
+      });
 
-        } catch (error) {
-            console.error("Error de red/conexión:", error);
-            alert("Error al conectar con el servidor. Verifica la URL de la API.");
-        }
+      if (response.ok) {
+        alert("Registro exitoso. ¡Inicia sesión!");
+        navigate("/login");
+      } else {
+        const errorData = await response.json();
+        alert(errorData.msg || "Error al registrarse");
+      }
+    } catch {
+      alert("Error al conectar con el servidor");
     }
+  };
 
+  return (
+    <div className="container-fluid">
+      <div className="px-5">
+        <h2>Crear tu cuenta</h2>
 
-    return (
-        <div className="container-fluid d-flex mx-0 px-0">
+        <form onSubmit={registrarse}>
 
-            <div className="image-container">
-                <img src={fondoRegistro} alt="..." />
+          <label>Nombre <span className="required">*</span></label>
+          <RegisterFormInput name="firstname" value={values.firstname} handleChange={handleChange} />
+          {errors.firstname && <small className="error">{errors.firstname}</small>}
+
+          <label>Apellido <span className="required">*</span></label>
+          <RegisterFormInput name="lastname" value={values.lastname} handleChange={handleChange} />
+          {errors.lastname && <small className="error">{errors.lastname}</small>}
+
+          <label>Nombre de usuario</label>
+          <RegisterFormInput name="username" value={values.username} handleChange={handleChange} />
+
+          <div className="row-fields">
+            <div className="field">
+              <label>Edad <span className="required">*</span></label>
+              <RegisterFormInput
+                type="number"
+                name="edad"
+                value={values.edad}
+                handleChange={handleChange}
+              />
+              {errors.edad && <small className="error">{errors.edad}</small>}
             </div>
-            <div className="px-5" style={{ width: "100%" }}>
-                <h2 style={{ textAlign: "center" }}>Crear tu cuenta</h2>
-                <form action="" onSubmit={registrarse}>
-                    <RegisterFormInput
-                        type="text"
-                        idInput="exampleFormControlInput1"
-                        name="firstname" 
-                        placeholder="Ingrese nombre"
-                        value={values.firstname}
-                        handleChange={handleChange}
-                    />
-                    <RegisterFormInput
-                        type="text"
-                        idInput="exampleFormControlInput2"
-                        name="lastname" 
-                        placeholder="Ingrese apellido"
-                        value={values.lastname}
-                        handleChange={handleChange}
-                    />
-                    <RegisterFormInput
-                        type="text"
-                        idInput="exampleFormControlInput0"
-                        name="username" 
-                        placeholder="Ingrese nombre de usuario"
-                        value={values.username}
-                        handleChange={handleChange}
-                    />
-                    <RegisterFormInput
-                        type="number"
-                        idInput="exampleFormControlInput4"
-                        name="edad"
-                        placeholder="Ingrese edad"
-                        value={values.edad}
-                        handleChange={handleChange}
-                    />
-                    <select id="genero" value={values.genero} onChange={handleChange} name="genero">
-                        <option value="">Seleccione una opción</option>
-                        <option value="femenino">Femenino</option>
-                        <option value="masculino">Maculino</option>
-                    </select>
-                    <RegisterFormInput
-                        type="text"
-                        idInput="exampleFormControlInput5"
-                        name="email"
-                        placeholder="Ingrese correo"
-                        value={values.email}
-                        handleChange={handleChange}
-                    />
-                    <RegisterFormInput
-                        type="password"
-                        idInput="exampleFormControlInput6"
-                        name="password"
-                        placeholder="Ingrese contraseña"
-                        value={values.password}
-                        handleChange={handleChange}
-                    />
-                    <div className="d-grid gap-2">
-                        <button className="btn btn-primary" type="submit" >Registrarse</button>
-                    </div>
-                </form>
 
+            <div className="field">
+              <label>Género <span className="required">*</span></label>
+              <select name="genero" value={values.genero} onChange={handleChange}>
+                <option value="">Seleccione</option>
+                <option value="femenino">Femenino</option>
+                <option value="masculino">Masculino</option>
+              </select>
+              {errors.genero && <small className="error">{errors.genero}</small>}
             </div>
+          </div>
+
+          <label>Correo electrónico <span className="required">*</span></label>
+          <RegisterFormInput type="email" name="email" value={values.email} handleChange={handleChange} />
+          {errors.email && <small className="error">{errors.email}</small>}
+
+          <label>Contraseña <span className="required">*</span></label>
+          <RegisterFormInput type="password" name="password" value={values.password} handleChange={handleChange} />
+          {errors.password && <small className="error">{errors.password}</small>}
+
+          <button type="submit">Registrarse</button>
+        </form>
+
+        <div className="auth-footer">
+          ¿Ya estás registrado?
+          <span onClick={() => navigate("/login")}>Inicia sesión</span>
         </div>
-    );
-}
-//export default Registro;
+      </div>
+    </div>
+  );
+};
