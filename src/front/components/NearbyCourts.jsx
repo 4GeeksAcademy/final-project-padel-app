@@ -26,6 +26,7 @@ const NearbyCourts = ({ data, idUser, filters }) => {
         }
     };
 
+<<<<<<< HEAD
     useEffect(() => {
         if (!userLocation || data.length === 0) return;
 
@@ -60,6 +61,25 @@ const NearbyCourts = ({ data, idUser, filters }) => {
 
         setCoursDintance(pistaCercana);
     }, [data, userLocation, filters]);
+=======
+   useEffect(() => {
+    if (!Array.isArray(data) || data.length === 0) return;
+    if (!userLocation) return;
+
+    const pistaCercana = data.map((course) => {
+        const distance = getDistanceInKm(
+            userLocation.latitude,
+            userLocation.longitude,
+            course.latitude,
+            course.longitude
+        );
+
+            return { ...course, distance };
+        }).filter(element => element.distance <= 4)
+        console.log(pistaCercana);
+        setCoursDintance(pistaCercana)
+    }, [data, userLocation]);
+>>>>>>> feature/dashboardDos
 
     return (
         <div className="card p-4 dashboard-card">

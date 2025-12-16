@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar.jsx";
 import Header from "../components/Header.jsx";
 import StatsGrid from "../components/StatsGrid.jsx";
@@ -10,6 +11,7 @@ import { getListCours } from "../service/Courts.js";
 import "../styles/dashboard.css";
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     // const [user, setUser] = useState(null);
     const [user, setUser] = useState([]);
     const [matches, setMatches] = useState([]);
@@ -20,11 +22,10 @@ const Dashboard = () => {
         isMock: true  
     });
     const [Cours, setCours] = useState([]);
-    const [filters, setFilters] = useState({
-        text: "",
-        date: "",
-        distance: ""
-    });
+
+    // -------------------------------------------------
+    // Cargar datos del usuario autenticado
+    // -------------------------------------------------
     useEffect(() => {
         // const loadUser = async () => {
         //     const token = localStorage.getItem("token");
@@ -50,10 +51,10 @@ const Dashboard = () => {
 
         //         const data = await resp.json();
         //         console.log([data]);
-                
+
         //         setUser([data]);
         //         getCours ();
-          
+
         //         // Cargar partidos usando el ID real del usuario
         //         loadMatches(token, data.id);
 
@@ -61,48 +62,49 @@ const Dashboard = () => {
         //         console.error("Error cargando usuario:", error);
         //     }
         // };
-        getCours ();
+        getCours();
         loadUser();
     }, []);
 
 
     //Cargando datos del usuario logueado
     const loadUser = async () => {
-            const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
 
-            if (!token) {
-                console.error("No hay token. Usuario no autenticado.");
+        if (!token) {
+            console.error("No hay token. Usuario no autenticado.");
+            return;
+        }
+
+        try {
+            const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/me", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!resp.ok) {
+                const text = await resp.text();
+                console.error("Error en /api/me:", resp.status, text);
                 return;
             }
 
-            try {
-                const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/me", {
-                    method: "GET",
-                    headers: {
-                        "Authorization": "Bearer " + token
-                    }
-                });
+            const data = await resp.json();
+            console.log(data);
 
-                if (!resp.ok) {
-                    const text = await resp.text();
-                    console.error("Error en /api/me:", resp.status, text);
-                    return;
-                }
+            setUser(data);
 
-                const data = await resp.json();
-                console.log(data);
-                
-                setUser(data);
-                
-          
-                // Cargar partidos usando el ID real del usuario
-                loadMatches(token, data.id);
+
+            // Cargar partidos usando el ID real del usuario
+            loadMatches(token, data.id);
 
             } catch (error) {
                 console.error("Error cargando usuario:", error);
             }
         };
 
+    // -------------------------------------------------
     // Cargar partidos del usuario
     const loadMatches = async (token, userId) => {
         try {
@@ -144,6 +146,12 @@ const Dashboard = () => {
 
     }, [matches]);
 
+
+    // -------------------------------------------------
+    // (Opcional) estadísticas — tu backend NO tiene este endpoint
+    // Por ahora no se usa, pero lo dejo comentado por si lo implementas luego
+    // -------------------------------------------------
+
     const loadStats = async (token) => {
         try {
             const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats", {
@@ -171,17 +179,28 @@ const Dashboard = () => {
     if (!user) return <div>Cargando dashboard...</div>;
 
     return (
-        <div className="dashboard-container d-flex">
-            <Sidebar user={user} />
+        <div className="dashboard-wrapper">
+
+            {/* NAVBAR SUPERIOR */}
+            <Header user={user} />
+
+            <div className="dashboard-shell">
+
+                {/* SIDEBAR */}
+                <Sidebar user={user} />
 
             <div className="main-content flex-grow-1">
-                {/*AÑADIDO: se pasan filtros al Header */}
-                <Header user={user} filters={filters} setFilters={setFilters} />
+                <Header user={user} />
 
-                <div className="container-fluid py-4">
-                    <StatsGrid stats={stats} />
+                    {/* ESTADÍSTICAS ARRIBA */}
+                    <div className="row mb-4">
+                        <div className="col-12">
+                            <StatsGrid stats={stats} />
+                        </div>
+                    </div>
 
-                    <div className="row mt-4">
+                    {/* CONTENIDO PRINCIPAL */}
+                    <div className="row">
                         <div className="col-md-8">
                             {/*AÑADIDO: filtros */}
                             <MatchesAvailable matches={matches} filters={filters} />
@@ -193,10 +212,13 @@ const Dashboard = () => {
                             <PlayedMatches matches={matches} />
                         </div>
                     </div>
-                </div>
+
+                </main>
             </div>
         </div>
     );
+
+
 };
 
 export default Dashboard;

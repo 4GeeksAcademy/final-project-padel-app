@@ -24,6 +24,7 @@ export const LandingPage = () => {
   return (
     <div className="lp-container-fluid">
       {/* NAVBAR FIXED */}
+<<<<<<< HEAD
       <nav className="lp-navbar">
         <div className="lp-logo">MVPadel</div>
         <div className="lp-nav-links">
@@ -49,6 +50,129 @@ export const LandingPage = () => {
       <section className="lp-section lp-hero" id="inicio">
         <div className="lp-hero-content">
           <h1>Juega, Compite, Disfruta</h1>
+=======
+      <div className="landing-page">
+        <nav className="navbar">
+          <div className="navbar-content">
+            <div className="logo">MVPadel</div>
+            <div className="nav-links">
+              <a href="#inicio" className="nav-link">
+                Inicio
+              </a>
+              <a href="#features" className="nav-link">
+                Características
+              </a>
+              <a href="#how" className="nav-link">
+                Cómo Funciona
+              </a>
+              <button className="btn-nav btn-signup" onClick={handleSignup}>
+                Registrarse
+              </button>
+              <button className="btn-nav btn-login" onClick={handleLogin}>
+                Iniciar Sesión
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+      {/* CONTAINER PRINCIPAL CON GRADIENTE FIJO */}
+      <div className="landing-container"></div>
+
+      {/* CONTENIDO SCROLLABLE */}
+      <div className="scrollable-content">
+        {/* HERO SECTION */}
+        <section className="hero" id="inicio">
+          <div className="hero-content">
+            <h1>Juega, Compite, Disfruta</h1>
+            <p>
+              Conecta con jugadores de padel, participa en torneos y sé parte
+              de la comunidad más grande de España
+            </p>
+            <div className="cta-buttons">
+              <button
+                className="btn-cta btn-primary"
+                onClick={handleUnete}
+              >
+                Únete Gratis
+              </button>
+              <button
+                className="btn-cta btn-secondary"
+                onClick={scrollToHow}
+              >
+                Descubre Cómo Funciona
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* CARACTERÍSTICAS */}
+        <section className="features-section" id="features">
+          <h2 className="section-title">¿Por qué MVPadel?</h2>
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">🎾</div>
+              <h3>Encuentra Rivales</h3>
+              <p>Conecta con jugadores de tu nivel en tu zona y juega cuando quieras</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">🏆</div>
+              <h3>Torneos Exclusivos</h3>
+              <p>Participa en torneos semanales y gana premios increíbles</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">👥</div>
+              <h3>Comunidad Activa</h3>
+              <p>Únete a miles de jugadores apasionados por el padel</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">📊</div>
+              <h3>Estadísticas</h3>
+              <p>Mejora tu juego con análisis detallados de tu desempeño</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">🎯</div>
+              <h3>Entrenamiento</h3>
+              <p>Accede a entrenamientos personalizados de profesionales</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">💰</div>
+              <h3>Reservas Fáciles</h3>
+              <p>Reserva canchas con descuentos exclusivos para miembros</p>
+            </div>
+          </div>
+        </section>
+
+        {/* CÓMO FUNCIONA */}
+        <section className="how-it-works" id="how">
+          <h2 className="section-title">Cómo Funciona</h2>
+          <div className="steps-container">
+            <div className="step">
+              <div className="step-number">1</div>
+              <h3>Regístrate</h3>
+              <p>Crea tu cuenta en menos de 1 minuto</p>
+            </div>
+            <div className="step">
+              <div className="step-number">2</div>
+              <h3>Completa tu Perfil</h3>
+              <p>Comparte tu nivel y preferencias de juego</p>
+            </div>
+            <div className="step">
+              <div className="step-number">3</div>
+              <h3>Encuentra Amigos</h3>
+              <p>Conecta con jugadores compatibles en tu zona</p>
+            </div>
+            <div className="step">
+              <div className="step-number">4</div>
+              <h3>¡A Jugar!</h3>
+              <p>Reserva una cancha y disfruta del mejor padel</p>
+            </div>
+          </div>
+        </section>
+
+        {/* BANNER PROMOCIONAL */}
+        <section className="promo-banner">
+          <h2>🎁 Promoción Especial</h2>
+>>>>>>> feature/dashboardDos
           <p>
             Conecta con jugadores de padel, participa en torneos y sé parte de
             la comunidad más grande de España
