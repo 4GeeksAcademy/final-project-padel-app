@@ -67,25 +67,29 @@ const MapCard = () => {
     };
 
     useEffect(() => {
-        if (!mapRef.current || !userLocation || cours.length === 0) return;
+  if (
+    !mapRef.current ||
+    !userLocation ||
+    !Array.isArray(cours) ||
+    cours.length === 0
+  ) return;
 
-        cours.forEach((course) => {
-            const distance = getDistanceInKm(
-                userLocation.latitude,
-                userLocation.longitude,
-                course.latitude,
-                course.longitude
-            );
+  cours.forEach((course) => {
+    const distance = getDistanceInKm(
+      userLocation.latitude,
+      userLocation.longitude,
+      course.latitude,
+      course.longitude
+    );
 
-            if (distance <= 2) {
-                const marker = L.marker([course.latitude, course.longitude])
-                    .addTo(mapRef.current)
-                    .bindPopup(`${course.name}<br/>${distance.toFixed(2)} km`);
+    if (distance <= 2) {
+      L.marker([course.latitude, course.longitude])
+        .addTo(mapRef.current)
+        .bindPopup(`${course.name}<br/>${distance.toFixed(2)} km`);
+    }
+  });
+}, [cours, userLocation]);
 
-                marker.on("click", () => setSelectedCourse(course));
-            }
-        });
-    }, [cours, userLocation]);
 
     const showRoute = () => {
         if (!userLocation || !mapRef.current || !selectedCourse) return;

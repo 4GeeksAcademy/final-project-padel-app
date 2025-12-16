@@ -32,15 +32,18 @@ const NearbyCourts = ({ data,idUser }) => {
         }
     };
 
-    useEffect(() => {
-        if (!userLocation || data.length === 0) return;
-        const pistaCercana = data.map((course) => {
-            const distance = getDistanceInKm(
-                userLocation.latitude,
-                userLocation.longitude,
-                course.latitude,
-                course.longitude
-            );
+   useEffect(() => {
+    if (!Array.isArray(data) || data.length === 0) return;
+    if (!userLocation) return;
+
+    const pistaCercana = data.map((course) => {
+        const distance = getDistanceInKm(
+            userLocation.latitude,
+            userLocation.longitude,
+            course.latitude,
+            course.longitude
+        );
+
             return { ...course, distance };
         }).filter(element => element.distance <= 4)
         console.log(pistaCercana);
