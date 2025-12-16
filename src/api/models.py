@@ -180,7 +180,9 @@ class Match(db.Model):
                 "direccion": self.court.address,
                 "ciudad": self.court.city,
                 # Si luego agregas una imagen:
-                "imagen": getattr(self.court, "image_url", None)
+                "imagen": getattr(self.court, "image_url", None),
+                "longitude":self.court.latitude,
+                "latitude":self.court.longitude
             } if self.court else None,
         }
 
