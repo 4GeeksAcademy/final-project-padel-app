@@ -105,6 +105,7 @@ const Dashboard = () => {
         }
     };
 
+    
     // -------------------------------------------------
     // Cargar partidos del usuario
     // -------------------------------------------------
@@ -149,7 +150,6 @@ const Dashboard = () => {
         });
 
     }, [matches]);
-
 
     // -------------------------------------------------
     // (Opcional) estadísticas — tu backend NO tiene este endpoint
