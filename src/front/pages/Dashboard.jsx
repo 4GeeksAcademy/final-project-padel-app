@@ -1,138 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar.jsx";
-import Header from "../components/Header.jsx";
+import { useOutletContext } from "react-router-dom";
 import StatsGrid from "../components/StatsGrid.jsx";
 import MatchesAvailable from "../components/MatchesAvailable.jsx";
 import NearbyCourts from "../components/NearbyCourts.jsx";
 import MapCard from "../components/MapCard.jsx";
 import PlayedMatches from "../components/PlayedMatches.jsx";
-import { getListCours } from "../service/Courts.js";
+import { getListCours, fetchNearbyCourts } from "../service/Courts.js";
 import "../styles/dashboard.css";
+import { getListMatches } from "../service/Match.js";
 
 const Dashboard = () => {
-    const navigate = useNavigate();
-    // const [user, setUser] = useState(null);
-    const [user, setUser] = useState([]);
+
+    const { user: contextUser } = useOutletContext();
     const [matches, setMatches] = useState([]);
+    const [listMatches, setListMatches] = useState([]);
     const [stats, setStats] = useState({
         total_matches: 15,
         matches_won: 7,
         matches_lost: 8,
-        isMock: true  
+        isMock: true
     });
     const [Cours, setCours] = useState([]);
 
-    // -------------------------------------------------
-    // Cargar datos del usuario autenticado
-    // -------------------------------------------------
+    // Cargar canchas y partidos disponibles
     useEffect(() => {
-        // const loadUser = async () => {
-        //     const token = localStorage.getItem("token");
-
-        //     if (!token) {
-        //         console.error("No hay token. Usuario no autenticado.");
-        //         return;
-        //     }
-
-        //     try {
-        //         const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/me", {
-        //             method: "GET",
-        //             headers: {
-        //                 "Authorization": "Bearer " + token
-        //             }
-        //         });
-
-        //         if (!resp.ok) {
-        //             const text = await resp.text();
-        //             console.error("Error en /api/me:", resp.status, text);
-        //             return;
-        //         }
-
-        //         const data = await resp.json();
-        //         console.log([data]);
-
-        //         setUser([data]);
-        //         getCours ();
-
-        //         // Cargar partidos usando el ID real del usuario
-        //         loadMatches(token, data.id);
-
-        //     } catch (error) {
-        //         console.error("Error cargando usuario:", error);
-        //     }
-        // };
         getCours();
-        loadUser();
+        getMatches();
     }, []);
 
+    // Cargar datos del usuario
+    useEffect(() => {
+        if (contextUser?.id) {
+            const token = localStorage.getItem("token");
+            loadMatches(token, contextUser.id);
 
-    //Cargando datos del usuario logueado
-    const loadUser = async () => {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            console.error("No hay token. Usuario no autenticado.");
-            return;
+            if (contextUser.latitude && contextUser.longitude) {
+                fetchNearbyCourts(contextUser.latitude, contextUser.longitude)
+                    .then(nearby => {
+                        if (nearby?.length > 0) setCours(nearby);
+                    })
+                    .catch(error => console.error("Error cargando canchas cercanas:", error));
+            }
         }
-
-        try {
-            const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/me", {
-                method: "GET",
-                headers: {
-                    "Authorization": "Bearer " + token
-                }
-            });
-
-            if (!resp.ok) {
-                const text = await resp.text();
-                console.error("Error en /api/me:", resp.status, text);
-                return;
-            }
-
-            const data = await resp.json();
-            console.log(data);
-
-            setUser(data);
+    }, [contextUser]);
 
 
-            // Cargar partidos usando el ID real del usuario
-            loadMatches(token, data.id);
-
-            } catch (error) {
-                console.error("Error cargando usuario:", error);
-            }
-        };
 
     // -------------------------------------------------
     // Cargar partidos del usuario
     const loadMatches = async (token, userId) => {
         try {
-            const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/users/${userId}/matches`, {
+            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${userId}/matches`, {
                 headers: {
-                    "Authorization": "Bearer " + token
+                    "Authorization": `Bearer ${token}`
                 }
             });
 
             if (!resp.ok) {
-                const text = await resp.text();
-                console.error("Error cargando matches:", resp.status, text);
+                console.error("Error cargando matches:", resp.status);
                 return;
             }
 
             const data = await resp.json();
             setMatches(data || []);
-
         } catch (error) {
             console.error("Error cargando matches:", error);
         }
     };
 
+    // Calcular estadísticas reales
     useEffect(() => {
-        if (!matches) return;
-        if (matches.length === 0) return;
+        if (!matches?.length) return;
 
-        // DESDE AQUÍ TODO ES REAL
         const total = matches.length;
         const won = matches.filter(m => m.status === "won").length;
         const lost = matches.filter(m => m.status === "lost").length;
@@ -143,77 +82,41 @@ const Dashboard = () => {
             matches_lost: lost,
             isMock: false
         });
-
     }, [matches]);
 
-
-    // -------------------------------------------------
-    // (Opcional) estadísticas — tu backend NO tiene este endpoint
-    // Por ahora no se usa, pero lo dejo comentado por si lo implementas luego
-    // -------------------------------------------------
-
-    const loadStats = async (token) => {
+    const getCours = async () => {
         try {
-            const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/user/stats", {
-                headers: {
-                    "Authorization": "Bearer " + token
-                }
-            });
-
-            const data = await res.json();
-            setStats(data || null);
-
+            const result = await getListCours();
+            setCours(result);
         } catch (error) {
-            console.error("Error cargando stats:", error);
+            console.error("Error cargando canchas:", error);
         }
     };
 
-
-    const getCours = async () => {
-        const result = await getListCours();
-        setCours(result);
-        console.log(result);
+    const getMatches = async () => {
+        try {
+            const result = await getListMatches();
+            setListMatches(result);
+        } catch (error) {
+            console.error("Error cargando lista de partidos:", error);
+        }
     };
 
-    // Renderizado
-    if (!user) return <div>Cargando dashboard...</div>;
+    if (!contextUser) return <div>Cargando dashboard...</div>;
 
     return (
-        <div className="dashboard-wrapper">
+        <div className="row mt-4">
+            <div className="col-md-8">
+                <StatsGrid stats={stats} />
+                <div className="mt-4">
+                    <MatchesAvailable matches={matches} data={listMatches} />
+                    <NearbyCourts data={Cours} idUser={contextUser.id} />
+                </div>
+            </div>
 
-            {/* NAVBAR SUPERIOR */}
-            <Header user={user} />
-
-            <div className="dashboard-shell">
-
-                {/* SIDEBAR */}
-                <Sidebar user={user} />
-
-            <div className="main-content flex-grow-1">
-                <Header user={user} />
-
-                    {/* ESTADÍSTICAS ARRIBA */}
-                    <div className="row mb-4">
-                        <div className="col-12">
-                            <StatsGrid stats={stats} />
-                        </div>
-                    </div>
-
-                    {/* CONTENIDO PRINCIPAL */}
-                    <div className="row">
-                        <div className="col-md-8">
-                            {/*AÑADIDO: filtros */}
-                            <MatchesAvailable matches={matches} filters={filters} />
-                            <NearbyCourts data={Cours} idUser={user.id} filters={filters} />
-                        </div>
-
-                        <div className="col-md-4">
-                            <MapCard />
-                            <PlayedMatches matches={matches} />
-                        </div>
-                    </div>
-
-                </main>
+            <div className="col-md-4">
+                <MapCard />
+                <PlayedMatches matches={matches} />
             </div>
         </div>
     );

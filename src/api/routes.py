@@ -277,6 +277,44 @@ def courts_delete(court_id):
 
     return jsonify({"deleted": True}), 200
 
+@api.route('/courts/nearby', methods=['POST'])
+def courts_nearby():
+    """Get courts near user location"""
+    data = request.get_json() or {}
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
+    radius = data.get('radius', 5)  # km
+    
+    if not latitude or not longitude:
+        raise APIException('latitude and longitude required', status_code=400)
+    
+    from math import radians, sin, cos, sqrt, atan2
+    
+    courts = Court.query.filter_by(deleted_at=None).all()
+    nearby = []
+    
+    for court in courts:
+        if not court.latitude or not court.longitude:
+            continue
+        
+        # Haversine formula
+        R = 6371
+        lat1, lon1 = radians(latitude), radians(longitude)
+        lat2, lon2 = radians(court.latitude), radians(court.longitude)
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        a = sin(dlat/2)**2 + cos(lat1)*cos(lat2)*sin(dlon/2)**2
+        c = 2*atan2(sqrt(a), sqrt(1-a))
+        distance = R*c
+        
+        if distance <= radius:
+            court_data = court.serialize()
+            court_data['distance'] = round(distance, 2)
+            nearby.append(court_data)
+    
+    nearby.sort(key=lambda x: x['distance'])
+    return jsonify(nearby), 200
+
 # ======================================
 # MATCHES
 # ======================================

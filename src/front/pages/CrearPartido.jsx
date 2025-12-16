@@ -1,77 +1,160 @@
-import React, { useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { createMatches } from "../service/Match";
-import { useNavigate } from "react-router-dom";
+import { getListCours } from "../service/Courts";
 
 export default function CrearPartido() {
-    const [values, setValues] = useState({
-        dia: "", 
-        hora: "", 
-        // nivel: "", 
-        // estado: "",
-        tipo: ""
-    })
-    // const { id } = useParams();
-    // console.log(id);
+    const { user } = useOutletContext();
     const { state } = useLocation();
-    const navigate= useNavigate()
+    const navigate = useNavigate();
 
+    const [courts, setCourts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [values, setValues] = useState({
+        dia: "",
+        hora: "",
+        tipo: "",
+        court_id: state?.id || ""
+    });
+
+    useEffect(() => {
+        if (!state?.id) {
+            loadCourts();
+        }
+    }, [state]);
+
+    const loadCourts = async () => {
+        try {
+            const data = await getListCours();
+            setCourts(data || []);
+        } catch (error) {
+            console.error("Error cargando canchas:", error);
+            alert("Error al cargar las canchas");
+        }
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setValues({
-            ...values, [name]: value,
-        })
-    }
+        setValues(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     const createMatch = async (e) => {
         e.preventDefault();
-        const body = {
-            day:values.dia,
-            time:`${values.dia}T${values.hora}:00`,
-            type:values.tipo,
-            court_id:state.id,
-            organized_id:state.id_user
+
+        if (!values.court_id) {
+            alert("Por favor selecciona una cancha");
+            return;
         }
+
+        if (!values.dia || !values.hora || !values.tipo) {
+            alert("Por favor completa todos los campos");
+            return;
+        }
+
+        setLoading(true);
+
         try {
-        const result = await createMatches(body);
-                console.log(result);
-                setValues({dia:"",
-                hora:"",
-                tipo:""})
-                navigate('/dashboard')
+            const body = {
+                day: values.dia,
+                time: `${values.dia}T${values.hora}:00`, // ⭐ Formato correcto
+                type: values.tipo,
+                court_id: parseInt(values.court_id),
+                organized_id: user.id
+            };
+
+            const result = await createMatches(body);
+            
+            if (result?.id) {
+                alert("¡Partido creado exitosamente!");
+                navigate('/dashboard');
+            } else {
+                alert("Error al crear el partido");
+            }
         } catch (error) {
-        
+            console.error("Error creando partido:", error);
+            alert("Error al crear el partido: " + error.message);
+        } finally {
+            setLoading(false);
         }
-        
-    }
+    };
+
+    const selectedCourt = courts.find(c => c.id == values.court_id);
+    const courtName = state?.name || selectedCourt?.name || "Partido";
 
     return (
         <div className="container py-4">
-            <h2>Crear partido en cancha {state.name}</h2>
+            <h2>Crear partido en cancha: {courtName}</h2>
 
-            <form className="mt-3" action="" onSubmit={createMatch}>
-                <label className="form-label">Día</label>
-                <input className="form-control" type="date" id="dia" name="dia" value={values.dia} onChange={handleChange} />
+            <form className="mt-3" onSubmit={createMatch}>
+                {!state?.id && (
+                    <div className="mb-3">
+                        <label className="form-label">Cancha</label>
+                        <select
+                            className="form-control"
+                            name="court_id"
+                            value={values.court_id}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Selecciona una cancha</option>
+                            {courts.map(court => (
+                                <option key={court.id} value={court.id}>
+                                    {court.name} - {court.city}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
 
-                <label className="form-label mt-3">Hora</label>
-                <input className="form-control" type="time" id="hora" name="hora" value={values.hora} onChange={handleChange} />
+                <div className="mb-3">
+                    <label className="form-label">Día</label>
+                    <input
+                        className="form-control"
+                        type="date"
+                        name="dia"
+                        value={values.dia}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                {/* <label className="form-label mt-3">Nivel</label>
-                <select className="form-control">
-                    <option>Amateur</option>
-                    <option>Intermedio</option>
-                    <option>Avanzado</option>
-                </select> */}
+                <div className="mb-3">
+                    <label className="form-label">Hora</label>
+                    <input
+                        className="form-control"
+                        type="time"
+                        name="hora"
+                        value={values.hora}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <label className="form-label mt-3">Cantidad de jugadore</label>
-                <select id="tipo" value={values.genero} className="form-control" onChange={handleChange} name="tipo">
-                    <option value="">Seleccione una opción</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
-                </select>
+                <div className="mb-3">
+                    <label className="form-label">Cantidad de jugadores</label>
+                    <select
+                        className="form-control"
+                        name="tipo"
+                        value={values.tipo}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Seleccione una opción</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
 
-                <button className="btn btn-primary mt-4" type="submit">Crear Partido</button>
+                <button 
+                    className="btn btn-primary mt-4" 
+                    type="submit"
+                    disabled={loading}
+                >
+                    {loading ? "Creando..." : "Crear Partido"}
+                </button>
             </form>
         </div>
     );
