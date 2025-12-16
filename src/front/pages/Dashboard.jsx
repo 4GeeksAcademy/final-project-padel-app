@@ -8,11 +8,13 @@ import MapCard from "../components/MapCard.jsx";
 import PlayedMatches from "../components/PlayedMatches.jsx";
 import { getListCours, fetchNearbyCourts } from "../service/Courts.js";
 import "../styles/dashboard.css";
+import { getListMatches } from "../service/Match.js"
 
 const Dashboard = () => {
     // const [user, setUser] = useState(null);
     const [user, setUser] = useState([]);
     const [matches, setMatches] = useState([]);
+    const [listMatches, setListMatches] = useState([]);
     const [stats, setStats] = useState({
         total_matches: 15,
         matches_won: 7,
@@ -186,6 +188,14 @@ const Dashboard = () => {
         console.log(result);
     };
 
+
+    }
+    const getMatches = async () => {
+        const result = await getListMatches();
+        setListMatches(result);
+        console.log(result);
+    }
+    // -------------------------------------------------
     // Renderizado
     if (!user) return <div>Cargando dashboard...</div>;
 
