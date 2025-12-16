@@ -1,21 +1,25 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const MatchesAvailable = ({ matches = [] }) => {
+const MatchesAvailable = ({ matches = [],data }) => {
     const navigate = useNavigate();
+    console.log(data);
+    console.log(data.cancha);
+    // console.log(data.cancha.id);
+    
     return (
         <div className="card p-4 mb-4 dashboard-card">
 
             <h5 className="fw-bold mb-3">Partidos Disponibles</h5>
 
             <div className="row g-3">
-                {[1, 2, 3, 4].map((i) => (
-                    <div className="col-md-6" key={i}>
+                {data.map((i) => (
+                    <div className="col-md-6" key={i.id}>
                         <div className="border rounded p-3">
                             <div className="d-flex justify-content-between mb-2">
                                 <div>
                                     <strong>Hoy - 18:00</strong>
-                                    <p className="text-muted m-0">Club Deportivo Norte</p>
+                                    <p className="text-muted m-0">{i.cancha.nombre}</p>
                                 </div>
 
                                 <span className="badge bg-info text-dark">Amateur</span>

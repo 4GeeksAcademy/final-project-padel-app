@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { createMatches } from "../service/Match";
+import { useNavigate } from "react-router-dom";
 
 export default function CrearPartido() {
     const [values, setValues] = useState({
@@ -13,7 +14,8 @@ export default function CrearPartido() {
     // const { id } = useParams();
     // console.log(id);
     const { state } = useLocation();
-    console.log(state);
+    const navigate= useNavigate()
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -24,15 +26,9 @@ export default function CrearPartido() {
 
     const createMatch = async (e) => {
         e.preventDefault();
-        console.log(state.id);
-        console.log(state.id_user);
-        
-        console.log(values);
-
-
         const body = {
             day:values.dia,
-            time:values.hora,
+            time:`${values.dia}T${values.hora}:00`,
             type:values.tipo,
             court_id:state.id,
             organized_id:state.id_user
@@ -43,6 +39,7 @@ export default function CrearPartido() {
                 setValues({dia:"",
                 hora:"",
                 tipo:""})
+                navigate('/dashboard')
         } catch (error) {
         
         }
