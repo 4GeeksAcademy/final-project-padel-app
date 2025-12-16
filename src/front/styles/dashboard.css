@@ -1,0 +1,131 @@
+/* ===============================
+   FONDO GENERAL
+   =============================== */
+
+.dashboard-wrapper {
+  min-height: 100vh;
+  background-image: url("/workspaces/final-project-padel-app/src/front/assets/pista-de-padel-cesped-3_600x600.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* ===============================
+   NAVBAR SUPERIOR
+   =============================== */
+
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ===============================
+   LAYOUT PRINCIPAL
+   =============================== */
+
+.dashboard-shell {
+  display: flex;
+  width: 100%;
+}
+
+/* Sidebar debajo del navbar */
+.sidebar-container {
+  width: 260px;
+  min-height: calc(100vh - 70px);
+  margin-top: 70px;
+}
+
+/* ===============================
+   CONTENIDO PRINCIPAL
+   =============================== */
+
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+  background: transparent;
+}
+
+/* ===============================
+   ESTADÍSTICAS
+   =============================== */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.stats-card {
+  background: linear-gradient(
+    135deg,
+    rgba(46, 125, 50, 0.25),
+    rgba(255, 255, 255, 0.95)
+  );
+
+  border-radius: 18px;
+  padding: 1.5rem;
+  text-align: center;
+
+  border: 1px solid rgba(46, 125, 50, 0.35);
+  box-shadow: 0 14px 35px rgba(46, 125, 50, 0.25);
+
+  position: relative;
+  overflow: hidden;
+}
+
+
+.stats-card h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1b5e20;
+  margin: 0;
+}
+
+.stats-card p {
+  font-size: 0.9rem;
+  color: #4f6f52;
+  margin: 0.25rem 0 0;
+}
+
+/* ===============================
+   TARJETAS GENERALES
+   =============================== */
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* ===============================
+   MAPA
+   =============================== */
+
+.map-card #map {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

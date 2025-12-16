@@ -1,0 +1,339 @@
+/* Landing Page Styles - Namespaced with 'lp-' to avoid Bootstrap conflicts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.lp-container-fluid {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, rgb(144, 229, 244), rgb(255, 177, 154));
+  color: #2b2b2b;
+  overflow-x: hidden;
+}
+
+/* Navbar */
+.lp-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 15px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.lp-logo {
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, rgb(0, 180, 255), rgb(255, 140, 100));
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+
+.lp-nav-links {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.lp-nav-link {
+  color: #2b2b2b;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.lp-nav-link:hover {
+  color: #000;
+  background: linear-gradient(135deg, rgb(0, 180, 255), rgb(255, 140, 100));
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lp-btn-nav {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 14px;
+}
+
+.lp-btn-login {
+  background: rgba(255, 255, 255, 0.5);
+  color: #2b2b2b;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.lp-btn-signup {
+  background: linear-gradient(135deg, rgb(0, 180, 255), rgb(255, 140, 100));
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.lp-btn-nav:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Sections */
+.lp-section {
+  padding: 100px 5%;
+  position: relative;
+}
+
+.lp-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 120px; /* Space for navbar */
+}
+
+.lp-hero-content {
+  max-width: 800px;
+  z-index: 1;
+}
+
+.lp-hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgb(0, 180, 255), #ff6b35);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.lp-hero p {
+  font-size: 1.25rem;
+  color: #4a4a4a;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+/* Buttons CTA */
+.lp-cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.lp-btn-cta {
+  padding: 15px 35px;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lp-btn-primary {
+  background: linear-gradient(135deg, rgb(0, 180, 255), rgb(255, 140, 100));
+  color: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.lp-btn-secondary {
+  background: rgba(255, 255, 255, 0.6);
+  color: #2b2b2b;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.lp-btn-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Feature Cards (Glassmorphism) */
+.lp-section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 60px;
+  color: #2b2b2b;
+}
+
+.lp-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lp-card {
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 25px;
+  padding: 40px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.lp-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.lp-feature-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.lp-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #2b2b2b;
+  font-weight: 700;
+}
+
+.lp-card p {
+  color: #4a4a4a;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* How it Works */
+.lp-steps-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.lp-step {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+  position: relative;
+}
+
+.lp-step-number {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, rgb(144, 229, 244), rgb(255, 177, 154));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  margin: 0 auto 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.lp-step h3 {
+  margin-bottom: 10px;
+  color: #2b2b2b;
+}
+
+/* Promo Banner */
+.lp-promo-banner {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  padding: 60px;
+  text-align: center;
+  margin: 100px 5%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.lp-promo-banner h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Footer */
+.lp-footer {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 60px 5% 20px;
+  margin-top: 50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.lp-footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.lp-footer-section h4 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #2b2b2b;
+}
+
+.lp-footer-section a {
+  color: #4a4a4a;
+  text-decoration: none;
+  line-height: 2;
+  transition: color 0.3s;
+}
+
+.lp-footer-section a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.lp-footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lp-hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .lp-navbar {
+    padding: 15px;
+  }
+
+  .lp-nav-links {
+    display: none; /* Simplify for mobile, ideally replace with burger menu later */
+  }
+  
+  .lp-cta-buttons {
+    flex-direction: column;
+  }
+  
+  .lp-features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .lp-steps-container {
+    flex-direction: column;
+  }
+}

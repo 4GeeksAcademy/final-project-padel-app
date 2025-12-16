@@ -1,10 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'  // Global styles for your application
-import { RouterProvider } from "react-router-dom";  // Import RouterProvider to use the router
-import { router } from "./routes";  // Import the router configuration
-import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes";
+import { StoreProvider } from './hooks/useGlobalReducer';
+import { AuthProvider } from './hooks/useAuth';
 import { BackendURL } from './components/BackendURL';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 
 const Main = () => {
     
@@ -15,15 +18,19 @@ const Main = () => {
         );
     return (
         <React.StrictMode>  
+            <AuthProvider>
             {/* Provide global state to all components */}
             <StoreProvider> 
+                
                 {/* Set up routing for the application */} 
                 <RouterProvider router={router}>
                 </RouterProvider>
             </StoreProvider>
+            </AuthProvider>
         </React.StrictMode>
     );
 }
 
 // Render the Main component into the root DOM element.
 ReactDOM.createRoot(document.getElementById('root')).render(<Main />)
+

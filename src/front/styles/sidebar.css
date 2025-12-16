@@ -1,0 +1,58 @@
+.sidebar-container {
+  width: 230px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Estilo base de cada ítem */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  margin-bottom: 6px;
+  border-radius: 12px;
+
+  /* 👇 COLOR VERDE PÁDEL */
+  color: #fcfdfd; /* verde oscuro pádel */
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Íconos estilo Pro */
+.sidebar-icon {
+  font-size: 18px;
+}
+
+/* Hover: AZUL CHÉVERE */
+.sidebar-item:hover {
+  background: #e5f0ff;
+  color: #037027;
+}
+
+/* Activo: el botón queda azul como Inicio */
+.sidebar-item.active {
+  background: #14ff4f;
+  color: white;
+}
+
+/* Asegura que el icono también cambie */
+.sidebar-item.active .sidebar-icon {
+  color: white;
+}
+
+.sidebar-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2563eb;
+  padding: 16px;
+  margin-bottom: 8px;
+}
+
+.sidebar {
+  padding-top: 24px;
+}
