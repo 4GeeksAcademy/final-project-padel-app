@@ -16,3 +16,40 @@ export const createMatches = async (obj) =>{
         
     }
  }
+
+//  export const getListMatches = async() =>{
+//     try {
+//         const request = await fetch(`${API_URL}/api/matches`,{
+//            method: "GET",
+//            headers: {
+//                 "Content-Type": "application/json"
+//            }
+//         })
+//         const response = await request.json();
+//         console.log(response);
+        
+//         return response
+//     } catch (error) {
+//         console.log(error);
+        
+//     }
+// }
+
+
+export const getListMatches = async() =>{
+    try {
+        const request = await fetch(`${API_URL}/api/matches`,{
+           method: "GET",
+           headers: {
+                "Content-Type": "application/json"
+           }
+        })
+        const response = await request.json();
+        console.log(response);
+        
+        return response
+    } catch (error) {
+        console.log(error);
+        
+    }
+}

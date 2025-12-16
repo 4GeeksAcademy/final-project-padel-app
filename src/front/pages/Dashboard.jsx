@@ -8,11 +8,13 @@ import MapCard from "../components/MapCard.jsx";
 import PlayedMatches from "../components/PlayedMatches.jsx";
 import { getListCours } from "../service/Courts.js";
 import "../styles/dashboard.css";
+import { getListMatches} from "../service/Match.js"
 
 const Dashboard = () => {
     // const [user, setUser] = useState(null);
     const [user, setUser] = useState([]);
     const [matches, setMatches] = useState([]);
+    const [listMatches,setListMatches] = useState([]);
     const [stats, setStats] = useState({
         total_matches: 15,
         matches_won: 7,
@@ -62,6 +64,7 @@ const Dashboard = () => {
         // };
         getCours ();
         loadUser();
+        getMatches()
     }, []);
 
 
@@ -177,6 +180,11 @@ const Dashboard = () => {
 
 
     }
+    const getMatches = async () =>{
+        const result = await getListMatches();
+        setListMatches(result);
+        console.log(result);
+    }
     // -------------------------------------------------
     // Renderizado
     // -------------------------------------------------
@@ -194,7 +202,7 @@ const Dashboard = () => {
 
                     <div className="row mt-4">
                         <div className="col-md-8">
-                            <MatchesAvailable matches={matches} />
+                            <MatchesAvailable matches={matches} data={listMatches} />
                             <NearbyCourts data={Cours} idUser={user.id} />
                         </div>
 
