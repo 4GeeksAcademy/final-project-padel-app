@@ -8,24 +8,23 @@ import MapCard from "../components/MapCard.jsx";
 import PlayedMatches from "../components/PlayedMatches.jsx";
 import { getListCours, fetchNearbyCourts } from "../service/Courts.js";
 import "../styles/dashboard.css";
-import { getListMatches } from "../service/Match.js"
 
 const Dashboard = () => {
     // const [user, setUser] = useState(null);
     const [user, setUser] = useState([]);
     const [matches, setMatches] = useState([]);
-    const [listMatches, setListMatches] = useState([]);
     const [stats, setStats] = useState({
         total_matches: 15,
         matches_won: 7,
         matches_lost: 8,
-        isMock: true  // esto es pa colcoar número per se borran cuando el usuario registre datos
+        isMock: true  
     });
     const [Cours, setCours] = useState([]);
-
-    // -------------------------------------------------
-    // Cargar datos del usuario autenticado
-    // -------------------------------------------------
+    const [filters, setFilters] = useState({
+        text: "",
+        date: "",
+        distance: ""
+    });
     useEffect(() => {
         // const loadUser = async () => {
         //     const token = localStorage.getItem("token");
@@ -64,7 +63,6 @@ const Dashboard = () => {
         // };
         getCours();
         loadUser();
-        getMatches()
     }, []);
 
 
@@ -124,9 +122,7 @@ const Dashboard = () => {
         }
     };
 
-    // -------------------------------------------------
     // Cargar partidos del usuario
-    // -------------------------------------------------
     const loadMatches = async (token, userId) => {
         try {
             const resp = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/users/${userId}/matches`, {
@@ -151,11 +147,9 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (!matches) return;
-
-        // 👇 SI NO HAY PARTIDOS REALES, NO TOCAMOS EL MOCK
         if (matches.length === 0) return;
 
-        // 👇 DESDE AQUÍ TODO ES REAL
+        // DESDE AQUÍ TODO ES REAL
         const total = matches.length;
         const won = matches.filter(m => m.status === "won").length;
         const lost = matches.filter(m => m.status === "lost").length;
@@ -168,12 +162,6 @@ const Dashboard = () => {
         });
 
     }, [matches]);
-
-
-    // -------------------------------------------------
-    // (Opcional) estadísticas — tu backend NO tiene este endpoint
-    // Por ahora no se usa, pero lo dejo comentado por si lo implementas luego
-    // -------------------------------------------------
 
     const loadStats = async (token) => {
         try {
@@ -196,17 +184,9 @@ const Dashboard = () => {
         const result = await getListCours();
         setCours(result);
         console.log(result);
+    };
 
-
-    }
-    const getMatches = async () => {
-        const result = await getListMatches();
-        setListMatches(result);
-        console.log(result);
-    }
-    // -------------------------------------------------
     // Renderizado
-    // -------------------------------------------------
     if (!user) return <div>Cargando dashboard...</div>;
 
     return (
@@ -214,15 +194,17 @@ const Dashboard = () => {
             <Sidebar user={user} />
 
             <div className="main-content flex-grow-1">
-                <Header user={user} />
+                {/*AÑADIDO: se pasan filtros al Header */}
+                <Header user={user} filters={filters} setFilters={setFilters} />
 
                 <div className="container-fluid py-4">
                     <StatsGrid stats={stats} />
 
                     <div className="row mt-4">
                         <div className="col-md-8">
-                            <MatchesAvailable matches={matches} data={listMatches} />
-                            <NearbyCourts data={Cours} idUser={user.id} />
+                            {/*AÑADIDO: filtros */}
+                            <MatchesAvailable matches={matches} filters={filters} />
+                            <NearbyCourts data={Cours} idUser={user.id} filters={filters} />
                         </div>
 
                         <div className="col-md-4">

@@ -2,58 +2,71 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDistanceInKm } from "../utils/functions";
 
-const NearbyCourts = ({ data,idUser }) => {
+const NearbyCourts = ({ data, idUser, filters }) => {
     const [selectedCourt, setSelectedCourt] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
     const [coursDintance, setCoursDintance] = useState([]);
-    const [coursNearby, setCoursNearby] = useState();
     const navigate = useNavigate();
-    console.log(data);
-    console.log(idUser);
-    
+
     useEffect(() => {
         getLocation();
-    }, [])
-
+    }, []);
 
     const getLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
-                    setUserLocation({ latitude, longitude })
+                    setUserLocation({ latitude, longitude });
                 },
                 (error) => {
                     console.error("Error obteniendo ubicación:", error);
                 }
             );
-        } else {
-            alert("Geolocalización no soportada por tu navegador");
         }
     };
 
     useEffect(() => {
         if (!userLocation || data.length === 0) return;
-        const pistaCercana = data.map((course) => {
-            const distance = getDistanceInKm(
-                userLocation.latitude,
-                userLocation.longitude,
-                course.latitude,
-                course.longitude
-            );
-            return { ...course, distance };
-        }).filter(element => element.distance <= 4)
-        console.log(pistaCercana);
-        setCoursDintance(pistaCercana)
-    }, [data, userLocation]);
+
+        const pistaCercana = data
+            .map((course) => {
+                const distance = getDistanceInKm(
+                    userLocation.latitude,
+                    userLocation.longitude,
+                    course.latitude,
+                    course.longitude
+                );
+                return { ...course, distance };
+            })
+            .filter((court) => court.distance <= 4)
+            
+            // FILTROS DEL BUSCADOR
+            .filter((court) => {
+                const matchText =
+                    court.name
+                        .toLowerCase()
+                        .includes(filters.text.toLowerCase()) ||
+                    court.address
+                        .toLowerCase()
+                        .includes(filters.text.toLowerCase());
+
+                const matchDistance =
+                    !filters.distance ||
+                    court.distance <= Number(filters.distance);
+
+                return matchText && matchDistance;
+            });
+
+        setCoursDintance(pistaCercana);
+    }, [data, userLocation, filters]);
 
     return (
         <div className="card p-4 dashboard-card">
             <h5 className="fw-bold mb-3">Canchas Cercanas</h5>
-            {
-            coursDintance.length > 0 ?
-                coursDintance.map((court) => (
 
+            {coursDintance.length > 0 ? (
+                coursDintance.map((court) => (
                     <div
                         key={court.id}
                         className="border rounded p-3 mb-3 d-flex justify-content-between"
@@ -61,11 +74,8 @@ const NearbyCourts = ({ data,idUser }) => {
                         <div>
                             <strong>{court.name}</strong>
                             <p className="text-muted m-0">{court.address}</p>
-                            {/* <p className="text-muted m-0">
-                            {court.distance} - {court.price}
-                        </p> */}
                             <p className="text-muted m-0">
-                                {court.distance.toFixed(2)}Km
+                                {court.distance.toFixed(2)} Km
                             </p>
                         </div>
 
@@ -79,76 +89,25 @@ const NearbyCourts = ({ data,idUser }) => {
 
                             <button
                                 className="btn btn-primary btn-sm"
-                                //  onClick={() => navigate("/crear-partido")}
-                                // onClick={() => navigate("/crear-partido",{
-                                //     state:{nombre:`${court.name}`}
-                                // })
-                                // onClick={() => navigate("/dashboard/crear-partido",{
-                                //     state:{id:court.id,name:court.name}
-                                // })
-                                onClick={() => navigate("/crear-partido",{
-                                    state:{id:court.id,name:court.name, id_user:idUser}
-                                })
-                            }
+                                onClick={() =>
+                                    navigate("/crear-partido", {
+                                        state: {
+                                            id: court.id,
+                                            name: court.name,
+                                            id_user: idUser,
+                                        },
+                                    })
+                                }
                             >
                                 Crear partido
                             </button>
                         </div>
                     </div>
-                )) 
-                : <p style={{ textAlign: "center" }}>No hay pistas cercanas</p>
-                }
-
-            {/* MODAL */}
-            {selectedCourt && (
-                <div
-                    onClick={() => setSelectedCourt(null)}
-                    style={{
-                        position: "fixed",
-                        inset: 0,
-                        background: "rgba(0,0,0,0.5)",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        zIndex: 9999,
-                    }}
-                >
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        className="bg-white p-4 rounded shadow"
-                        style={{ width: "90%", maxWidth: "500px" }}
-                    >
-                        <h5 className="fw-bold">{selectedCourt.name}</h5>
-
-                        <iframe
-                            src={selectedCourt.mapUrl}
-                            width="100%"
-                            height="300"
-                            style={{ border: 0 }}
-                            allowFullScreen=""
-                            loading="lazy"
-                        ></iframe>
-
-                        <div className="d-flex justify-content-end mt-3">
-                            <button
-                                className="btn btn-secondary me-2"
-                                onClick={() => setSelectedCourt(null)}
-                            >
-                                Cerrar
-                            </button>
-
-                            <button
-                                className="btn btn-primary"
-                                onClick={() => {
-                                    setSelectedCourt(null);
-                                    navigate("/crear-partido");
-                                }}
-                            >
-                                Crear partido
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                ))
+            ) : (
+                <p style={{ textAlign: "center" }}>
+                    No hay pistas cercanas
+                </p>
             )}
         </div>
     );
