@@ -1,19 +1,33 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteMatch } from "../service/Match.js";
+import { ModalUnirme } from "./ModalUnirme.jsx";
+import { useState } from "react";
 
 const MatchesAvailable = ({ data = [], refresh }) => {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
+    const [showUnir, setShowUnir] = useState(false);
 
     const handleDelete = async (id) => {
         if (window.confirm("¿Estás seguro de que deseas eliminar este partido?")) {
             const result = await deleteMatch(id);
             if (result) {
-                refresh(); 
+                refresh();
             }
         }
     };
 
+    const unirPartido = () => {
+        setShowUnir(true);
+    }
+    const closeModal = () => {
+        setShowUnir(false)
+    }
+
+    const unirme = async (e) =>{
+        console.log(e);
+        
+    }
     return (
         <div className="card p-4 mb-4 dashboard-card">
             <h5 className="fw-bold mb-3">Partidos Disponibles</h5>
@@ -25,7 +39,7 @@ const MatchesAvailable = ({ data = [], refresh }) => {
                                 <div className="d-flex justify-content-between mb-2">
                                     <div>
                                         <strong>
-                                            {i.day ? new Date(i.day).toLocaleDateString("es-ES") : "S/D"} - 
+                                            {i.day ? new Date(i.day).toLocaleDateString("es-ES") : "S/D"} -
                                             {i.time?.includes("T") ? i.time.split("T")[1].slice(0, 5) : i.time}
                                         </strong>
                                         <p className="text-muted m-0">
@@ -38,8 +52,8 @@ const MatchesAvailable = ({ data = [], refresh }) => {
                                 <div className="d-flex justify-content-between align-items-center mt-3">
                                     <span className="text-muted">Jugadores: {i.participantes?.length || 0} / {i.type || 4}</span>
                                     <div className="btn-group gap-2">
-                                        <button 
-                                            className="btn btn-outline-danger btn-sm border-0" 
+                                        <button
+                                            className="btn btn-outline-danger btn-sm border-0"
                                             onClick={() => handleDelete(i.id)}
                                             title="Eliminar partido"
                                         >
@@ -47,7 +61,7 @@ const MatchesAvailable = ({ data = [], refresh }) => {
                                         </button>
                                         <button
                                             className="btn btn-primary btn-sm"
-                                            onClick={() => navigate("/partidos")}
+                                            onClick={unirPartido}
                                         >
                                             Unirse
                                         </button>
@@ -60,6 +74,14 @@ const MatchesAvailable = ({ data = [], refresh }) => {
                     <p className="text-center text-muted">No hay partidos disponibles.</p>
                 )}
             </div>
+
+            <ModalUnirme
+                show={showUnir}
+                title="Unirme al equipo"
+                closeModal={closeModal}
+                unirme={unirme}
+            />
+
         </div>
     );
 };

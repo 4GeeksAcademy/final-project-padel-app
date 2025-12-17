@@ -93,6 +93,9 @@ label {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+#miModal{
+  background-color: rgba(0,0,0, 0.5) !important;
+}
 
 @media (max-width: 480px) {
   .row-fields {
