@@ -109,7 +109,7 @@ const Dashboard = () => {
             <div className="col-md-8">
                 <StatsGrid stats={stats} />
                 <div className="mt-4">
-                    <MatchesAvailable matches={matches} data={listMatches} refresh={getMatches} />
+                    <MatchesAvailable matches={matches} data={listMatches} refresh={getMatches} user={contextUser} />
                     <NearbyCourts data={Cours} idUser={contextUser.id} />
                 </div>
             </div>

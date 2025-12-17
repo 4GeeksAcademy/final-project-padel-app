@@ -82,6 +82,54 @@ export const joinMatch = async (userId, matchId) => {
     }
 };
 
+export const leaveMatch = async (userId, matchId) => {
+    try {
+        const token = localStorage.getItem("token");
+        
+        if (!token) {
+            throw new Error("No token available");
+        }
+
+        // First, get the match_user entry to get the link ID
+        const getUserMatchResponse = await fetch(`${API_URL}/api/match_users`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!getUserMatchResponse.ok) {
+            throw new Error("Error getting match users");
+        }
+
+        const matchUsers = await getUserMatchResponse.json();
+        const userMatch = matchUsers.find(mu => mu.user_id === userId && mu.match_id === matchId);
+
+        if (!userMatch) {
+            throw new Error("User is not in this match");
+        }
+
+        // Delete the match_user entry
+        const response = await fetch(`${API_URL}/api/match_users/${userMatch.id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Error leaving match");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Leave match error:", error);
+        throw error;
+    }
+};
+
 export const deleteMatch = async (matchId) => {
     try {
         const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/matches/${matchId}`, {
