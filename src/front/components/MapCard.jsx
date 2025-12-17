@@ -102,28 +102,33 @@ const MapCard = () => {
     });
 
     useEffect(() => {
-  if (
-    !mapRef.current ||
-    !userLocation ||
-    !Array.isArray(cours) ||
-    cours.length === 0
-  ) return;
+        if (
+            !mapRef.current ||
+            !userLocation ||
+            !Array.isArray(cours) ||
+            cours.length === 0
+        ) return;
 
-  cours.forEach((course) => {
-    const distance = getDistanceInKm(
-      userLocation.latitude,
-      userLocation.longitude,
-      course.latitude,
-      course.longitude
-    );
+        cours.forEach((course) => {
+            const distance = getDistanceInKm(
+                userLocation.latitude,
+                userLocation.longitude,
+                course.latitude,
+                course.longitude
+            );
 
-    if (distance <= 40000000000000) {
-      L.marker([course.latitude, course.longitude])
-        .addTo(mapRef.current)
-        .bindPopup(`${course.name}<br/>${distance.toFixed(2)} km`);
-    }
-  });
-}, [cours, userLocation]);
+            if (distance <= 40000000000000) {
+                const marker = L.marker([course.latitude, course.longitude])
+                    .addTo(mapRef.current)
+                    .bindPopup(`${course.name}<br/>${distance.toFixed(2)} km`);
+
+                marker.on("click", () => {
+                    setSelectedCourse(course);
+                });
+
+            }
+        });
+    }, [cours, userLocation]);
 
 
     // 4. Show Route Logic
