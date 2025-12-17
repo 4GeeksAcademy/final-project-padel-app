@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.js";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import { getListCours, fetchNearbyCourts } from "../service/Courts.js";
+import { getDistanceInKm } from "../utils/functions";
 
 // Fix for default marker icons in Leaflet with React
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -89,15 +90,15 @@ const MapCard = () => {
         markersRef.current.forEach(marker => marker.remove());
         markersRef.current = [];
 
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos((lat1 * Math.PI) / 180) *
-                Math.cos((lat2 * Math.PI) / 180) *
-                Math.sin(dLon / 2) *
-                Math.sin(dLon / 2);
+        // const a =
+        //     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        //     Math.cos((lat1 * Math.PI) / 180) *
+        //         Math.cos((lat2 * Math.PI) / 180) *
+        //         Math.sin(dLon / 2) *
+        //         Math.sin(dLon / 2);
 
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
+        // const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        // return R * c;
     });
 
     useEffect(() => {
@@ -116,7 +117,7 @@ const MapCard = () => {
       course.longitude
     );
 
-    if (distance <= 2) {
+    if (distance <= 40000000000000) {
       L.marker([course.latitude, course.longitude])
         .addTo(mapRef.current)
         .bindPopup(`${course.name}<br/>${distance.toFixed(2)} km`);
