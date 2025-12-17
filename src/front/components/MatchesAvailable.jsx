@@ -49,52 +49,53 @@ import { useNavigate } from "react-router-dom";
 //     );
 // };
 
-const MatchesAvailable = ({ matches = [],data }) => {
+const MatchesAvailable = ({ matches = [], data }) => {
     const navigate = useNavigate();
     console.log(data);
     console.log(data.cancha);
     // console.log(data.cancha.id);
-    
+
     return (
         <div className="card p-4 mb-4 dashboard-card">
-
             <h5 className="fw-bold mb-3">Partidos Disponibles</h5>
 
             <div className="row g-3">
-                {data.map((i) => (
-                    <div className="col-md-6" key={i.id}>
-                        <div className="border rounded p-3">
-                            <div className="d-flex justify-content-between mb-2">
-                                <div>
-                                    <strong>{new Date(i.day).toLocaleDateString("es-ES", {
-                                            month: "short",
-                                            day: "numeric",
-                                            year: "numeric",
-                                        })}- {i.time.split("T")[1].slice(0, 5)}
-                                    </strong>
-                                    <p className="text-muted m-0">{i.cancha.nombre}</p>
+                {data && data.length > 0 ? (
+                    data.map((i) => (
+                        <div className="col-md-6" key={i.id}>
+                            <div className="border rounded p-3">
+                                <div className="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <strong>
+                                            {i.day ? new Date(i.day).toLocaleDateString("es-ES") : "Fecha N/A"} -
+                                            {i.time?.includes("T") ? i.time.split("T")[1].slice(0, 5) : i.time}
+                                        </strong>
+                                        {/* Usamos encadenamiento opcional ?. para evitar que la app explote */}
+                                        <p className="text-muted m-0">
+                                            {i.cancha?.nombre || i.court?.name || "Cancha no definida"}
+                                        </p>
+                                    </div>
+                                    <span className="badge bg-info text-dark">Amateur</span>
                                 </div>
 
-                                <span className="badge bg-info text-dark">Amateur</span>
-                            </div>
-
-                            <div className="d-flex justify-content-between align-items-center">
-                                <span className="text-muted">Jugadores: 2/4</span>
-                                <button
-                                    className="btn btn-outline-primary btn-sm"
-                                    onClick={() => navigate("/partidos")}
-                                >
-                                    Unirse
-                                </button>
-
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <span className="text-muted">Jugadores: 2 / {i.type || 4}</span>
+                                    <button
+                                        className="btn btn-outline-primary btn-sm"
+                                        onClick={() => navigate("/partidos")}
+                                    >
+                                        Unirse
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p className="text-center">No hay partidos disponibles en este momento.</p>
+                )}
             </div>
         </div>
     );
 };
-
 
 export default MatchesAvailable;

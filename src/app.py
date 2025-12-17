@@ -18,19 +18,19 @@ ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../dist/')
 
 app = Flask(__name__)
-
-FRONTEND_URL = "https://improved-fishstick-jj9qrgr5xqwv2pqp-3000.app.github.dev"
-
-app = Flask(__name__)
-
 CORS(app)
 
-print("CORS habilitado globalmente")
+FRONTEND_URL = "https://laughing-computing-machine-q7x5jvjpxqgvhxr75-3000.app.github.dev"
+
+# app = Flask(__name__)
+
+
+# print("CORS habilitado globalmente")
 
 # FRONTEND_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3000.app.github.dev"
 # CORS(app, resources={r"/api/*": {"origins": FRONTEND_URL, "supports_credentials": True}})
 
-CORS(app)
+# CORS(app)
 
 # print(f"CORS configurado con ÉXITO para origen: {FRONTEND_URL}")
 
