@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap');
+
 .padel-sidebar-wrapper {
   width: 230px;
   padding: 16px 10px;
@@ -12,6 +14,35 @@
   left: 0;
   height: 100vh;      
   overflow-y: auto; 
+}
+
+.padel-sidebar-logo {
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 24px;
+  padding: 20px 16px;
+  background: linear-gradient(135deg, #2d7ba8 0%, #5ba3d0 50%, #1e5f7f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: default;
+  user-select: none;
+  filter: drop-shadow(0 4px 12px rgba(45, 123, 168, 0.25));
+}
+
+.padel-sidebar-logo span {
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.padel-sidebar-logo:hover {
+  filter: drop-shadow(0 6px 16px rgba(45, 123, 168, 0.35));
+  transform: scale(1.02);
 }
 
 .padel-nav-item {

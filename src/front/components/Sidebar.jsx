@@ -5,6 +5,10 @@ import "../styles/sidebar.css";
 const Sidebar = () => {
     return (
         <div className="padel-sidebar-wrapper">
+            <div className="padel-sidebar-logo">
+                <span>MVP</span>adel
+            </div>
+
             <NavLink to="/dashboard" className="padel-nav-item">
                 <i className="fa-solid fa-house padel-nav-icon"></i>
                 <span>Inicio</span>
