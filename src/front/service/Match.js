@@ -81,3 +81,19 @@ export const joinMatch = async (userId, matchId) => {
         throw error;
     }
 };
+
+export const deleteMatch = async (matchId) => {
+    try {
+        const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/matches/${matchId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        if (!resp.ok) throw new Error("Error al eliminar el partido");
+        return await resp.json();
+    } catch (error) {
+        console.error("Error en deleteMatch:", error);
+        return null;
+    }
+};
