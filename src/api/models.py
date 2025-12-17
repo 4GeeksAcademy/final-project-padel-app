@@ -165,12 +165,12 @@ class Match(db.Model):
             # PARTICIPANTES
             "participantes": [
                 {
-                    "id": u.id,
-                    "username": u.username,
-                    "nombre": f"{u.firstname} {u.lastname}",
-                    "foto": u.profile_photo,
+                    "id": u.user.id,
+                    "username": u.user.username,
+                    "nombre": f"{u.user.firstname} {u.user.lastname}",
+                    "foto": u.user.profile_photo,
                 }
-                for u in self.users
+                for u in self.users if u.user
             ],
 
             # CANCHA
@@ -181,8 +181,8 @@ class Match(db.Model):
                 "ciudad": self.court.city,
                 # Si luego agregas una imagen:
                 "imagen": getattr(self.court, "image_url", None),
-                "longitude":self.court.latitude,
-                "latitude":self.court.longitude
+                "longitude": self.court.latitude,
+                "latitude": self.court.longitude
             } if self.court else None,
         }
 

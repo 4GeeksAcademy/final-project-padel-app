@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDistanceInKm } from "../utils/functions";
 
-const NearbyCourts = ({ data, idUser, filters }) => {
+// const NearbyCourts = ({ data, idUser, filters }) => {
+    const NearbyCourts = ({ data, idUser}) => {
     const [selectedCourt, setSelectedCourt] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
     const [coursDintance, setCoursDintance] = useState([]);
@@ -41,24 +42,25 @@ const NearbyCourts = ({ data, idUser, filters }) => {
             })
             .filter((court) => court.distance <= 40000000000000)
             // FILTROS DEL BUSCADOR
-            .filter((court) => {
-                const matchText =
-                    court.name
-                        .toLowerCase()
-                        .includes(filters.text.toLowerCase()) ||
-                    court.address
-                        .toLowerCase()
-                        .includes(filters.text.toLowerCase());
+            // .filter((court) => {
+            //     const matchText =
+            //         court.name
+            //             .toLowerCase()
+            //             .includes(filters.text.toLowerCase()) ||
+            //         court.address
+            //             .toLowerCase()
+            //             .includes(filters.text.toLowerCase());
 
-                const matchDistance =
-                    !filters.distance ||
-                    court.distance <= Number(filters.distance);
+            //     const matchDistance =
+            //         !filters.distance ||
+            //         court.distance <= Number(filters.distance);
 
-                return matchText && matchDistance;
-            });
+            //     return matchText && matchDistance;
+            // });
 
         setCoursDintance(pistaCercana);
-    }, [data, userLocation, filters]);
+    // }, [data, userLocation, filters]);
+    }, [data, userLocation]);
 
     return (
         <div className="card p-4 dashboard-card">

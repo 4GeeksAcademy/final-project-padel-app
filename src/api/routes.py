@@ -514,3 +514,22 @@ def match_players(match_id):
 
     links = MatchUser.query.filter_by(match_id=match_id, deleted_at=None).all()
     return jsonify([l.serialize() for l in links]), 200
+
+@api.route('/matches/<int:match_id>', methods=['DELETE'])
+def delete_match(match_id):
+    match = Match.query.get(match_id)
+    
+    if not match:
+        return jsonify({"message": "Partido no encontrado"}), 404
+
+    try:
+        MatchUser.query.filter_by(match_id=match_id).delete()
+        
+        
+        db.session.delete(match)
+        db.session.commit()
+        
+        return jsonify({"message": "Partido eliminado correctamente"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
