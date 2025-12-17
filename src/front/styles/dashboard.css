@@ -62,18 +62,14 @@
 }
 
 .stats-card {
-  background: linear-gradient(
-    135deg,
-    rgba(46, 125, 50, 0.25),
-    rgba(255, 255, 255, 0.95)
-  );
+  background: #ffffff;
 
   border-radius: 18px;
   padding: 1.5rem;
   text-align: center;
 
-  border: 1px solid rgba(46, 125, 50, 0.35);
-  box-shadow: 0 14px 35px rgba(46, 125, 50, 0.25);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   position: relative;
   overflow: hidden;
