@@ -88,7 +88,7 @@ export const Registro = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="registro-page">
       <div className="px-5">
         <h2>Crear tu cuenta</h2>
 
