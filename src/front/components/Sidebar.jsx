@@ -2,40 +2,36 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/sidebar.css";
 
-
-
 const Sidebar = () => {
     return (
-        <div className="dashboard-sidebar">
-            
-
-            <NavLink to="/dashboard" className="sidebar-item">
-                <i className="fa-solid fa-house sidebar-icon"></i>
+        <div className="padel-sidebar-wrapper">
+            <NavLink to="/dashboard" className="padel-nav-item">
+                <i className="fa-solid fa-house padel-nav-icon"></i>
                 <span>Inicio</span>
             </NavLink>
 
-            <NavLink to="/partidos" className="sidebar-item">
-                <i className="fa-solid fa-calendar-days sidebar-icon"></i>
+            <NavLink to="/partidos" className="padel-nav-item">
+                <i className="fa-solid fa-calendar-days padel-nav-icon"></i>
                 <span>Partidos</span>
             </NavLink>
 
-            <NavLink to="/cancha/1" className="sidebar-item">
-                <i className="fa-solid fa-border-all sidebar-icon"></i>
+            <NavLink to="/cancha/1" className="padel-nav-item">
+                <i className="fa-solid fa-border-all padel-nav-icon"></i>
                 <span>Canchas</span>
             </NavLink>
 
-            <NavLink to="/jugadores" className="sidebar-item">
-                <i className="fa-solid fa-users sidebar-icon"></i>
+            <NavLink to="/jugadores" className="padel-nav-item">
+                <i className="fa-solid fa-users padel-nav-icon"></i>
                 <span>Jugadores</span>
             </NavLink>
 
-            <NavLink to="/rankings" className="sidebar-item">
-                <i className="fa-solid fa-trophy sidebar-icon"></i>
+            <NavLink to="/rankings" className="padel-nav-item">
+                <i className="fa-solid fa-trophy padel-nav-icon"></i>
                 <span>Rankings</span>
             </NavLink>
 
-            <NavLink to="/ajustes" className="sidebar-item">
-                <i className="fa-solid fa-gear sidebar-icon"></i>
+            <NavLink to="/ajustes" className="padel-nav-item">
+                <i className="fa-solid fa-gear padel-nav-icon"></i>
                 <span>Ajustes</span>
             </NavLink>
         </div>

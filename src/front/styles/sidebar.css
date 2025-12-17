@@ -1,58 +1,74 @@
-.sidebar-container {
+.padel-sidebar-wrapper {
   width: 230px;
-  padding: 15px;
+  padding: 16px 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  background: linear-gradient(135deg, #0f172a 0%, #517bb3 100%);
+  border-right: 3px solid #90e5f4;
+  min-height: 100vh;
 }
+.padel-sidebar-wrapper {
+  position: sticky; 
+  top: 0;
+  left: 0;
 
-/* Estilo base de cada ítem */
-.sidebar-item {
+  height: 100vh;      
+  overflow-y: auto; 
+.padel-nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 18px;
-  margin-bottom: 6px;
-  border-radius: 12px;
-
-  /* 👇 COLOR VERDE PÁDEL */
-  color: #fcfdfd; /* verde oscuro pádel */
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  color: #cbd5e1;
   font-weight: 500;
-
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 3px solid transparent;
+  position: relative;
+  text-decoration: none;
 }
 
-/* Íconos estilo Pro */
-.sidebar-icon {
+.padel-nav-icon {
   font-size: 18px;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* Hover: AZUL CHÉVERE */
-.sidebar-item:hover {
-  background: #e5f0ff;
-  color: #037027;
+.padel-nav-item:hover {
+  background: rgba(144, 229, 244, 0.12);
+  color: #90e5f4;
+  border-left-color: #90e5f4;
+  padding-left: 20px;
 }
 
-/* Activo: el botón queda azul como Inicio */
-.sidebar-item.active {
-  background: #14ff4f;
-  color: white;
+.padel-nav-item:hover .padel-nav-icon {
+  transform: scale(1.15);
+  color: #90e5f4;
 }
 
-/* Asegura que el icono también cambie */
-.sidebar-item.active .sidebar-icon {
-  color: white;
+.padel-nav-item.active {
+  background: linear-gradient(90deg, rgba(144, 229, 244, 0.2) 0%, rgba(255, 177, 154, 0.1) 100%);
+  color: #ffb19a;
+  border-left-color: #ffb19a;
+  font-weight: 600;
+  box-shadow: inset 2px 0 8px rgba(255, 177, 154, 0.2);
+  padding-left: 18px;
 }
 
-.sidebar-title {
-  font-size: 20px;
+.padel-nav-item.active .padel-nav-icon {
+  color: #ffb19a;
+  transform: scale(1.1);
+}
+
+.padel-sidebar-title {
+  font-size: 18px;
   font-weight: 700;
-  color: #2563eb;
-  padding: 16px;
+  color: #90e5f4;
+  padding: 12px 16px;
   margin-bottom: 8px;
-}
-
-.sidebar {
-  padding-top: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 11px;
 }
