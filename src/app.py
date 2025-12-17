@@ -20,7 +20,7 @@ static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../
 app = Flask(__name__)
 CORS(app)
 
-FRONTEND_URL = "https://laughing-computing-machine-q7x5jvjpxqgvhxr75-3000.app.github.dev"
+FRONTEND_URL = "https://sample-service-name-7w13.onrender.com"
 
 # app = Flask(__name__)
 

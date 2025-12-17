@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import secrets
 import smtplib
 from email.mime.text import MIMEText
-FRONTEND_URL = "https://scaling-journey-jjgpvrvqg59rcjgg7-3000.app.github.dev"  
+FRONTEND_URL = "https://sample-service-name-7w13.onrender.com"  
 
 api = Blueprint('api', __name__)
 
