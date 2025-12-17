@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: linear-gradient(135deg, #0f172a 0%, #517bb3 100%);
+  background: linear-gradient(135deg, #0d0d0d 0%, #466f8f 100%);
   border-right: 3px solid #90e5f4;
   min-height: 100vh;
 }
